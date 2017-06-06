@@ -2,13 +2,7 @@ var nodemailer = require('nodemailer');
 
 function EmailHandler(email) {
     // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-            user: 'aymeric@agence187.com', // Your email id
-            pass: 'taf,1234' // Your password
-        }
-    });
+    let transporter = nodemailer.createTransport();
 
     // setup email data with unicode symbols
     let mailOptions = {
