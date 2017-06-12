@@ -3,10 +3,14 @@
 
 function Email(body) {
   this.from = body.from;
-  this.to = body.to;
+  this.name = body.name;
+  this.recipients = body.recipients;
   this.subject = body.subject;
   this.text = body.text;
   this.html = body.html;
+  this.id = "undefined";
+  this.status = "unsent";
 };
+
 
 module.exports = Email;
