@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var nodemailer = require('nodemailer');
+var Email = require('../models/email-model');
+var EmailBDD = require('../metiers/email-bdd');
 var EmailHandler = require('../metiers/email-handler');
 var EmailUpdater = require('../metiers/email-updater');
-var Email = require('../models/email-model');
 var EmailVerif = require('../tools/email-verification');
 
 var bodyParser = require('body-parser');
@@ -17,13 +18,24 @@ router.get('/', function(req, res, next) {
 
 router.post('/send-email', function(req, res) {
   if(EmailVerif(req.body)){
-    res.json(EmailUpdater({ID: EmailHandler(new Email(req.body))})));
-    console.log("good");
+    var email = new Email(req.body);
+    new Promise((resolve, reject) =>{ EmailBDD(email, "createEmail"); resolve()})
+      .then((email)=>
+        {
+          console.log("Ola1");
+          EmailHandler(email);
+          resolve();
+        })
+          .then((email)=>{
+            console.log("Ola2");
+            console.log(email);
+            res.json(EmailUpdater((email), ["updateMessageStatus", "updateMessageDate"]))
+        })
+  //  res.json(EmailUpdater(EmailHandler(email), ["updateMessageStatus", "updateMessageDate"]));
   }
 });
 
-router.get('/accuse-reception', function(req, res) {
-  EmailUpdater("18859019858613553");
+router.get('/email-bdd', function(req, res) {
 });
 
 

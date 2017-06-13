@@ -26,7 +26,9 @@ function EmailHandler(email){
       var returnValue = data.response.res.text
       var stringValue = JSON.parse(returnValue)
       var sentValue = stringValue.Sent[0];
-      return sentValue;
+      email.idMailjet = sentValue.MessageID;
+      return email;
+
     }
 
     sendEmail
