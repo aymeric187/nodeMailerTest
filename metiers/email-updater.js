@@ -1,3 +1,5 @@
+var EmailBDD = require('../metiers/email-bdd');
+
 function EmailUpdater(email, updateType){
 
   var foo = function () {}
@@ -16,45 +18,38 @@ function EmailUpdater(email, updateType){
 
       var message = mailjet.get('message')
 
-      var update = {
-          updateMessageStatus: function (data) {
-            var returnValue = data.response.res.text;
-            var stringValue = JSON.parse(returnValue);
-            email.status = stringValue.Data[0].Status;
-          },
+      message.request(email.idMailjet).then((data)=>{
+        var update = {
+            updateMessageStatus: function () {
+              var returnValue = data.response.res.text;
+              var stringValue = JSON.parse(returnValue);
+              email.status = stringValue.Data[0].Status;
+              console.log("passageUpdateStatus")
+            },
 
-          updateMessageDate: function (data) {
-            var returnValue = data.response.res.text;
-            var stringValue = JSON.parse(returnValue);
-            console.log(stringValue.Data[0].Status);
-          },
+            updateMessageDate: function () {
+              email.dateMailjet = new Date();
+            },
 
-          update: function () {
-            console.log("entreeUpdate")
-            EmailBDD(email, "updateEmail");
-          },
+            update: function () {
+              console.log("entreeUpdate")
+              EmailBDD(email, "updateEmail");
+            },
+        }
 
+          console.log("entree")
+          for(var i=0; i<updateType.length; i++){
+            foo = update[updateType[i]];
+            foo();
+          }
+          foo = update["update"];
+          foo();
+          return email;
+      })
+      .catch(function (reason) {
+        console.log(reason);
+  })
 
-      }
-
-          message.request(email.idMailjet)
-              .then((data)=>{
-                console.log(data);
-                console.log("entree")
-                  for(var i=0; i<updateType.length; i++){
-                    console.log(updateType[i])
-                    foo = update[updateType[i]];
-                    foo();
-                  }
-                  foo = update["update"];
-                  foo();
-              })
-              .catch(function (reason) {
-                console.log(reason);
-          })
-
-
-      // The following code update the email stocked in database
 }
 
 module.exports = EmailUpdater;
