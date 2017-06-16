@@ -18,11 +18,7 @@ function EmailHandler(email){
             'Subject': email.subject,
             'Text-part': email.text,
             'Recipients': email.recipients,
-          'Attachments': [{
-            "Content-Type": "text-plain",
-            "Filename": "test.txt",
-            "Content": email.html,
-          }],
+          ,
         }
         function handleData (data) {
           var returnValue = data.response.res.text
@@ -35,7 +31,7 @@ function EmailHandler(email){
         }
 
         sendEmail
-          .request(emailData).then(handleData)
+          .request(emailData).then(handleData).catch((error)=> resolve(error))
 
 
     })

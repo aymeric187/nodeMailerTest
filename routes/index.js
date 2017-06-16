@@ -27,7 +27,6 @@ router.post('/send-email', function(req, res) {
 
 
           emailBDD.then((tada)=>{
-            console.log(tada);
             var emailAPI = EmailHandler(email)
 
                   emailAPI.then((email)=>{
