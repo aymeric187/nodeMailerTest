@@ -2,7 +2,7 @@
 
 
 function Email(body) {
-  this._id = "3";
+  this._id = body._id;
   this.idMailjet = undefined;
   this.from = body.from;
   this.name = body.name;
