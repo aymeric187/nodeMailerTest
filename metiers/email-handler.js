@@ -18,7 +18,7 @@ function EmailHandler(email){
             'Subject': email.subject,
             'Text-part': email.text,
             'Recipients': email.recipients,
-          ,
+
         }
         function handleData (data) {
           var returnValue = data.response.res.text
@@ -31,7 +31,7 @@ function EmailHandler(email){
         }
 
         sendEmail
-          .request(emailData).then(handleData).catch((error)=> resolve(error))
+          .request(emailData).then(handleData).catch((error)=> reject(error))
 
 
     })
