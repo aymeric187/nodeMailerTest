@@ -18,29 +18,23 @@ router.get('/', function(req, res, next) {
 
 router.post('/send-email', function(req, res) {
   if(EmailVerif(req.body)){
-    new Promise((resolve, reject) => { console.log("ola-1"); var email = new Email(req.body); console.log(email); resolve(email)
+    new Promise((resolve, reject) => { var email = new Email(req.body); resolve(email)
     })
 
 
       .then((email) =>{
-        console.log("Ola0");
-        console.log(email);
         var emailBDD = EmailBDD(email, "createEmail")
 
 
 
 
-          emailBDD.then((email)=>{
-            console.log("Ola2");
-            console.log(email);
+          emailBDD.then((tada)=>{
+            console.log(tada);
             var emailAPI = EmailHandler(email)
 
-
                   emailAPI.then((email)=>{
-                    console.log("Ola4");
-                    console.log(email);
                     if(email.hasOwnProperty("idMailjet")){
-                      res.json(EmailUpdater((email), ["updateMessageStatus", "updateMessageDate"]))
+                      EmailUpdater((email), ["updateMessageStatus", "updateMessageDate"]).then((email)=> { return res.json(email)})
                     }
                   })
 
@@ -58,9 +52,20 @@ router.post('/send-email', function(req, res) {
 
   //  res.json(EmailUpdater(EmailHandler(email), ["updateMessageStatus", "updateMessageDate"]));
 
-router.get('/email-bdd', function(req, res) {
-  var emailBDD = EmailBDD(req.body.id, "getEmailByIdPost")
-  emailBDD.then((email)=> { res.json(email) })
+router.get('/email-single', function(req, res) {
+  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { email._rev = undefined; return res.json(email)}).catch((error)=>{ res.json(error)})
+});
+
+router.get('/email-list', function(req, res) {
+  var emailBDD = EmailBDD(req.query.email, "getEmailByUserEmail").then((email)=> { res.json(email) }).catch((error)=>{ res.json(error)})
+});
+
+router.get('/email-status', function(req, res) {
+  var emailBDD = EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.status) }).catch((error)=>{ res.json(error)})
+});
+
+router.get('/email-dateMailjet', function(req, res) {
+  var emailBDD = EmailBDD(req.body.email, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjet) }).catch((error)=>{ res.json(error)})
 });
 
 

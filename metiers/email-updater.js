@@ -2,6 +2,9 @@ var EmailBDD = require('../metiers/email-bdd');
 
 function EmailUpdater(email, updateType){
 
+  return new Promise((resolve, reject) => {
+
+
   var foo = function () {}
 
   // The following code calls the Mailjet API in order to get Status
@@ -24,15 +27,15 @@ function EmailUpdater(email, updateType){
               var returnValue = data.response.res.text;
               var stringValue = JSON.parse(returnValue);
               email.status = stringValue.Data[0].Status;
-              console.log("passageUpdateStatus")
             },
 
             updateMessageDate: function () {
-              email.dateMailjet = new Date();
+              var returnValue = data.response.res.text;
+              var stringValue = JSON.parse(returnValue);
+              email.dateMailjet = stringValue.Data[0].ArrivedAt;
             },
 
             update: function () {
-              console.log("entreeUpdate")
               EmailBDD(email, "updateEmail");
             },
         }
@@ -44,11 +47,14 @@ function EmailUpdater(email, updateType){
           }
           foo = update["update"];
           foo();
-          return email;
+          resolve(email);
       })
       .catch(function (reason) {
         console.log(reason);
   })
+
+})
+
 
 }
 

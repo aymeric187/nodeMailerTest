@@ -22,35 +22,29 @@ function EmailBDD(email, actionAsked){
 
     var action = {
 
-      getEmailByUserEmail: function (userEmail) {
-        new Promise(resolve => {
-          db.allDocs({
-            include_docs: true
-          }).then((result) => {
-            this.data = [];
-            result.rows.map((row) => {
-              if(row.doc.type == 'email')
-                if(row.doc.from == userEmail){
-                  this.data.push(row.doc);
-                  console.log(row.doc)
-                }
-            });
-            resolve(this.data);
-          }).catch((error) => {
-            console.log(error);
-          });
-        });
-      },
-
-      getEmailByIdPost: function (email) {
-        new Promise(resolve => {
-          db.bulk({docs:[{_id: email}]}, function(er, res) {
+      getEmailByUserEmail: function () {
+          db.find({selector:{from:email}}, function(er, result) {
             if (er) {
               throw er;
             }
+            if(result.docs.length === 0){
+              reject("id uncorrect");
+            }
+            resolve(result.docs)
+          })
+      },
 
-            console.log('Inserted all documents'+ JSON.stringify(res));
-          });
+
+      getEmailByIdPost: function () {
+        db.find({selector:{_id:email}}, function(er, result) {
+          if (er) {
+            throw er;
+          }
+          console.log(typeof result.docs)
+          if("undefined" === typeof result.docs[0]){
+            reject("id uncorrect");
+          }
+          resolve(result.docs[0]);
         });
       },
 
@@ -63,19 +57,27 @@ function EmailBDD(email, actionAsked){
             if (headers && headers['set-cookie']) {
               cookies[username] = headers['set-cookie'];
             }
-
-            email._rev = body.rev;
-
+            email._rev = body.rev
+            resolve(email)
           })
-          resolve(email);
         },
 
       updateEmail: function(){
-        action["createEmail"]
+        db.bulk({docs:[email]}, function (er, body, headers) {
+            if (er) {
+              return console.log('Failed to insert into alice database: ' + er.message + "....." + er);
+            }
+            // Change the cookie if Cloudant tells us to.
+            if (headers && headers['set-cookie']) {
+              cookies[username] = headers['set-cookie'];
+            }
+          })
+          resolve(email);
       }
 
     }
   })
+
 }
 
 module.exports = EmailBDD;

@@ -2,7 +2,7 @@
 
 
 function Email(body) {
-  this._id = "1";
+  this._id = "3";
   this.idMailjet = undefined;
   this.from = body.from;
   this.name = body.name;
@@ -11,7 +11,7 @@ function Email(body) {
   this.text = body.text;
   this.html = body.html;
   this.status = "unsent";
-  this.datePOST = new Date();
+  this.datePOST = body.post;
   this.dateMailjet = "tadada";
 };
 

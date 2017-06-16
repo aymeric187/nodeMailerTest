@@ -2,8 +2,6 @@
 function EmailHandler(email){
 
   return new Promise((resolve, reject) => {
-      console.log("inside email-handler")
-      console.log(email);
       var apiKey = "e8ea3802545e22a1773e15f3abfa335b",
         apiSecret = "0d0425e4b5faf6235399ca28c4bc3ce7";
 
