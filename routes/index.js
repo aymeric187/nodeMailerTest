@@ -36,6 +36,7 @@ router.post('/send-email', function(req, res) {
                   })
 
           })
+          .catch((error)=> return res.json(error))
       })
 
 
