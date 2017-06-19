@@ -1,6 +1,6 @@
 function verifEntry(body){
   var isCorrect = false;
-  if(typeof body.from === "undefined") {console.log("dz"); return isCorrect}
+  if(typeof body.from === "undefined" || !body.from) {console.log("dz"); return isCorrect}
   else if(typeof body.name === "undefined" && body.name) {console.log("dz"); return isCorrect}
   else if(Object.prototype.toString.call( body.recipients ) != '[object Array]') return isCorrect;
   else if(typeof body.subject === "undefined") return isCorrect;
@@ -45,11 +45,10 @@ function verifName(name){
 }
 
 function EmailVerif(body){
-  //return verifEntry(body);
+  return verifEntry(body);
   //return verifAdresses(body.from);
   //return verifAdresses(body.recipients);
   //return verifName(body.name);
-  return true;
 }
 
 module.exports = EmailVerif;

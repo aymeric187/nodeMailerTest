@@ -18,7 +18,7 @@ function EmailHandler(email){
             'Subject': email.subject,
             'Text-part': email.text,
             'Html-part': email.html,
-            'Recipients': email.recipients,
+            'Recipients': email.recipients,"Headers": {"Reply-To":email.replyTo}
 
         }
         function handleData (data) {
