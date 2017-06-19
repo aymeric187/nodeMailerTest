@@ -45,10 +45,10 @@ function verifName(name){
 }
 
 function EmailVerif(body){
-  return verifEntry(body);
   //return verifAdresses(body.from);
   //return verifAdresses(body.recipients);
   //return verifName(body.name);
+  return true;
 }
 
 module.exports = EmailVerif;

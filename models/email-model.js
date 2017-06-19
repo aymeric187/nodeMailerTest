@@ -4,7 +4,7 @@
 function Email(body) {
   this._id = body._id;
   if (typeof body.idMailjet === "undefined") {this.idMailjet = undefined} else {this.idMailjet = body.idMailjet};
-  this.replyTo = body.replyTo;
+  if (typeof body.replyTo === "undefined") {this.replyTo = undefined} else {this.replyTo = body.replyTo};
   this.from = body.from
   this.name = body.name;
   this.recipients = body.recipients;
