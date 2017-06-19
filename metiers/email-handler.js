@@ -17,6 +17,7 @@ function EmailHandler(email){
             'FromName': email.name,
             'Subject': email.subject,
             'Text-part': email.text,
+            'Html-part': email.html,
             'Recipients': email.recipients,
 
         }

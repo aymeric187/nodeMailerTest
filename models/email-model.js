@@ -9,6 +9,7 @@ function Email(body) {
   this.recipients = body.recipients;
   this.subject = body.subject;
   this.text = body.text;
+  this.html = body.html;
   this.status = "unsent";
   this.datePOST = body.post;
   this.dateMailjet = "tadada";
