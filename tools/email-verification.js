@@ -1,54 +1,90 @@
-function verifEntry(body){
-  var isCorrect = false;
-  if(typeof body.from === "undefined" || !body.from) {console.log("dz"); return isCorrect}
-  else if(typeof body.name === "undefined" && body.name) {console.log("dz"); return isCorrect}
-  else if(Object.prototype.toString.call( body.recipients ) != '[object Array]') return isCorrect;
-  else if(typeof body.subject === "undefined") return isCorrect;
-  else if(typeof body.text === "undefined") return isCorrect;
-  else { isCorrect = true; console.log(body.name);return isCorrect }
+var verify = {};
+  verify['isCorrect'] = false;
+  verify['message'] = " ";
+
+function verifyEntry(body){
+  if(typeof body.from === "undefined" || !body.from) {  verify.message = "from incorrect"; return verify }
+  else if(typeof body.name === "undefined" || !body.name) { verify.message = "name incorrect"; return verify }
+  else if(typeof body.replyTo === "undefined" || !body.replyTo) { verify.message = "replyTo incorrect"; return verify }
+  else if(Object.prototype.toString.call( body.recipients ) != '[object Array]') { verify.message = "recipients incorrect"; return verify }
+  else if(!body.recipients[0].Email) { verify.message = "recipients incorrect"; return verify }
+  else { verify.isCorrect = true ;return verify }
 }
 
-function verifAdress(adress){
+function verifyNoSqlInjection(body){
+    verify.message = "possible noSql injection"
+    for (var key in body) {
+  // skip loop if the property is from prototype
+
+      var res = JSON.stringify(body[key]).match(/\$gt/gi);
+      if(res != null){ verify.isCorrect = false; return verify }
+      else{
+        res = JSON.stringify(body[key]).match(/\$ne/gi)
+        if(res != null){ verify.isCorrect = false; return verify }
+        else{
+          res = JSON.stringify(body[key]).match(/\$where/gi)
+          if(res != null){ verify.isCorrect = false; return verify }
+        }
+      }
+    }
+    verify.message = " ";
+    return verify;
+}
+
+function verifyAdress(adress){
   var isCorrect = false;
       if(adress.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) != null)
       {
         isCorrect = true
+        verify.message = "recipients correct"
       }else {
         isCorrect = false;
+        verify.message = "recipients incorrect"
       }
       return isCorrect;
 }
 
-function verifAdresses(adresses){
-    var isCorrect = false;
-    if(adresses[0].Email  != null){
+function verifyAdresses(adresses){
       var i = 0;
       do{
-        isCorrect = verifAdress(adresses[i].Email);
+        verify.isCorrect = verifyAdress(adresses[i].Email);
         i++;
-      }  while (i<adresses.length && isCorrect == null)
-    }else{
-      isCorrect = verifAdress(adresses);
-    }
-  return isCorrect;
+      }  while (i<adresses.length && verify.isCorrect === true)
+
+  return verify;
 }
 
-function verifName(name){
-    var isCorrect = false;
+function verifyName(name){
         if(name.match(/^[a-zA-Z -]+$/) != null)
         {
-          isCorrect = true
+          verify.isCorrect = true
+          verify.message = " ";
         }else {
-          isCorrect = false;
+          verify.isCorrect = false;
+          verify.message = "name incorrectly written"
         }
-  return isCorrect;
+  return verify;
 }
 
 function EmailVerif(body){
+  verify = verifyEntry(body);
+  if(verify.isCorrect){
+    verify = verifyAdresses(body.recipients)
+    if(verify.isCorrect){
+      verify = verifyNoSqlInjection(body)
+      if(verify.isCorrect){
+        verify = verifyName(body.name)
+        if(verify.isCorrect){
+              verify.message = "everything correct"
+              return verify;
+        }
+      }else return verify
+    }else return verify
+  }else return verify;
   //return verifAdresses(body.from);
   //return verifAdresses(body.recipients);
   //return verifName(body.name);
-  return true;
+  //return true;
 }
 
 module.exports = EmailVerif;

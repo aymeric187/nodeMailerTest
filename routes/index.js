@@ -15,7 +15,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/send-email', function(req, res) {
-  if(EmailVerif(req.body)){
     new Promise((resolve, reject) => { var email = new Email(req.body); resolve(email)
     })
 
@@ -34,17 +33,12 @@ router.post('/send-email', function(req, res) {
                       EmailUpdater((email), ["updateMessageStatus", "updateMessageDate"]).then((email)=> { return res.json(email)})
                     }
                   })
-
+                  .catch((error)=> { return res.json(error) })
           })
           .catch((error)=> { return res.json(error) })
       })
+      .catch((error)=> { return res.json(error) })
 
-
-      .catch(function(error){
-        console.log("erreur : "+error);
-      });
-
-    }
 
 })
 

@@ -36,16 +36,22 @@ function EmailBDD(email, actionAsked){
 
 
       getEmailByIdPost: function () {
+        var EmailUpdater = require('../metiers/email-updater');
+
         db.find({selector:{_id:email}}, function(er, result) {
           if (er) {
             throw er;
           }
           console.log(typeof result.docs)
           if("undefined" === typeof result.docs[0]){
-            reject("id uncorrect");
+            reject("idPost uncorrect");
           }
-          resolve(result.docs[0]);
-        });
+          if(result.docs[0].hasOwnProperty("idMailjet")){
+            EmailUpdater(result.docs[0], ["updateMessageStatus"]).then((email)=> { resolve(email)})
+          }else{
+            resolve(result.docs[0]);
+          }
+        })
       },
 
       createEmail: function () {

@@ -5,7 +5,7 @@ function EmailUpdater(email, updateType){
   return new Promise((resolve, reject) => {
 
 
-  var foo = function () {}
+      var foo = function () {}
 
   // The following code calls the Mailjet API in order to get Status
       var apiKey = "e8ea3802545e22a1773e15f3abfa335b",
@@ -40,9 +40,9 @@ function EmailUpdater(email, updateType){
             },
         }
 
-          console.log("entree")
           for(var i=0; i<updateType.length; i++){
             foo = update[updateType[i]];
+            console.log(foo);
             foo();
           }
           foo = update["update"];
