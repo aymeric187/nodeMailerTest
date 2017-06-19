@@ -20,17 +20,17 @@ router.post('/send-email', function(req, res) {
 
 
       .then((email) =>{
-        var emailBDD = EmailBDD(email, "createEmail")
+        EmailBDD(email, "createEmail")
 
 
 
 
-          emailBDD.then((tada)=>{
+          .then((tada)=>{
             var emailAPI = EmailHandler(email)
 
                   emailAPI.then((email)=>{
                     if(email.hasOwnProperty("idMailjet")){
-                      EmailUpdater((email), ["updateMessageStatus", "updateMessageDate"]).then((email)=> { return res.json(email)})
+                      EmailUpdater((email), ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
                     }
                   })
                   .catch((error)=> { return res.json(error) })
@@ -59,6 +59,18 @@ router.get('/email-status', function(req, res) {
 router.get('/email-dateMailjet', function(req, res) {
   var emailBDD = EmailBDD(req.body.email, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjet) }).catch((error)=>{ res.json(error)})
 });
+
+router.post('/email-event-catcher', function(req,res){
+  for (var i =0; i< req.body.length; i++){
+    var paramUpdate = {}
+    paramUpdate['MessageID'] = req.body[i].MessageID;
+    paramUpdate['dateMailjetOpened'] = new date(req.body[i].time);
+    paramUpdate['status'] = req.body[i].event;
+    var emailBDD = EmailBDD(paramUpdate, "updateEmail").catch((error){console.log(error)});
+  }
+
+  return res.sendStatus(400)
+})
 
 
 module.exports = router;

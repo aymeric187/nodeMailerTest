@@ -16,7 +16,6 @@ function EmailHandler(email){
             'FromEmail': email.from,
             'FromName': email.name,
             'Subject': email.subject,
-            'Text-part': email.text,
             'Html-part': email.html,
             'Recipients': email.recipients,"Headers": {"Reply-To":email.replyTo}
 

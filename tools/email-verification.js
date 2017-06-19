@@ -3,11 +3,15 @@ var verify = {};
   verify['message'] = " ";
 
 function verifyEntry(body){
-  if(typeof body.from === "undefined" || !body.from) {  verify.message = "from incorrect"; return verify }
+  else if(typeof body._id === "undefined" || !body._id) { verify.message = "_id incorrect"; return verify }
+  else if(typeof body.from === "undefined" || !body.from) {  verify.message = "from incorrect"; return verify }
   else if(typeof body.name === "undefined" || !body.name) { verify.message = "name incorrect"; return verify }
   else if(typeof body.replyTo === "undefined" || !body.replyTo) { verify.message = "replyTo incorrect"; return verify }
   else if(Object.prototype.toString.call( body.recipients ) != '[object Array]') { verify.message = "recipients incorrect"; return verify }
   else if(!body.recipients[0].Email) { verify.message = "recipients incorrect"; return verify }
+  else if(typeof body.subject === "undefined" || !body.subject) { verify.message = "subject incorrect"; return verify }
+  else if(typeof body.html === "undefined" || !body.html) { verify.message = "html incorrect"; return verify }
+  else if(typeof body.post === "undefined" || !body.post) { verify.message = "datePost incorrect"; return verify }
   else { verify.isCorrect = true ;return verify }
 }
 

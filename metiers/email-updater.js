@@ -29,10 +29,10 @@ function EmailUpdater(email, updateType){
               email.status = stringValue.Data[0].Status;
             },
 
-            updateMessageDate: function () {
+            updateMessageDateSent: function () {
               var returnValue = data.response.res.text;
               var stringValue = JSON.parse(returnValue);
-              email.dateMailjet = stringValue.Data[0].ArrivedAt;
+              email.dateMailjetSent = stringValue.Data[0].ArrivedAt;
             },
 
             update: function () {
