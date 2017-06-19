@@ -55,7 +55,7 @@ router.get('/email-single', function(req, res) {
 });
 
 router.get('/email-list', function(req, res) {
-  var emailBDD = EmailBDD(req.query.email, "getEmailByUserEmail").then((email)=> { res.json(email) })
+  var emailBDD = EmailBDD(req.query.email, "getEmailByUserEmail").then((email)=> { res.json(email) }).catch((error)=> { res.json(error)})
 });
 
 router.get('/email-status', function(req, res) {
