@@ -23,7 +23,7 @@ function EmailBDD(email, actionAsked){
     var action = {
 
       getEmailByUserEmail: function () {
-          db.find({selector:{from:email}}, function(er, result) {
+          db.find({selector:{replyTo:email}}, function(er, result) {
             if (er) {
               throw er;
             }
