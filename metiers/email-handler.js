@@ -24,7 +24,6 @@ function EmailHandler(email){
           var returnValue = data.response.res.text
           var stringValue = JSON.parse(returnValue)
           var sentValue = stringValue.Sent[0];
-          console.log("super important");
           email.idMailjet = sentValue.MessageID;
           resolve(email);
 

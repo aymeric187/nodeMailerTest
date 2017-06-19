@@ -1,11 +1,11 @@
 function verifEntry(body){
   var isCorrect = false;
   if(typeof body.from === "undefined") {console.log("dz"); return isCorrect}
-  else if(typeof body.name === "undefined") {console.log("dz"); return isCorrect}
+  else if(typeof body.name === "undefined" && body.name) {console.log("dz"); return isCorrect}
   else if(Object.prototype.toString.call( body.recipients ) != '[object Array]') return isCorrect;
   else if(typeof body.subject === "undefined") return isCorrect;
   else if(typeof body.text === "undefined") return isCorrect;
-  else { isCorrect = true; return isCorrect }
+  else { isCorrect = true; console.log(body.name);return isCorrect }
 }
 
 function verifAdress(adress){
