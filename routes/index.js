@@ -69,8 +69,8 @@ router.post('/email-event-catcher', function(req,res){
     var emailBDD = EmailBDD(paramUpdate, "updateEmail").catch((error)=>{console.log(error)});
 
   }
-
-  return res.sendStatus(200)*/
+*/
+  return res.sendStatus(200)
 })
 
 
