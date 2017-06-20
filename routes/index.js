@@ -66,6 +66,10 @@ router.get('/email-up', function(req, res) {
 
 router.post('/email-event-catcher', function(req,res){
     console.log(req.body)
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx" + req.body.MessageID)
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx" + req.body.time)
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx" + req.body.event)
+
   for (var i =0; i< req.body.length; i++){
 
     var paramUpdate = {}
