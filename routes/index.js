@@ -64,6 +64,11 @@ router.get('/email-up', function(req, res) {
   EmailBDD(req.body, ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
 });
 
+router.get('/email-upgrade', function(req, res) {
+  EmailUpdater(req.body, ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
+});
+
+
 router.post('/email-event-catcher', function(req,res){
 
     console.log("entree");
