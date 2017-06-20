@@ -74,6 +74,7 @@ function EmailBDD(email, actionAsked){
               if (headers && headers['set-cookie']) {
                 cookies[username] = headers['set-cookie'];
               }
+              console.log(body)
               resolve(email);
             }
             // Change the cookie if Cloudant tells us to.
