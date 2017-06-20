@@ -3,7 +3,7 @@ var verify = {};
   verify['message'] = " ";
 
 function verifyEntry(body){
-  else if(typeof body._id === "undefined" || !body._id) { verify.message = "_id incorrect"; return verify }
+  if(typeof body._id === "undefined" || !body._id) { verify.message = "_id incorrect"; return verify }
   else if(typeof body.from === "undefined" || !body.from) {  verify.message = "from incorrect"; return verify }
   else if(typeof body.name === "undefined" || !body.name) { verify.message = "name incorrect"; return verify }
   else if(typeof body.replyTo === "undefined" || !body.replyTo) { verify.message = "replyTo incorrect"; return verify }
