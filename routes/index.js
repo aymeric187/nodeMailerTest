@@ -69,7 +69,7 @@ router.post('/email-event-catcher', function(req,res){
 
 
     var paramUpdate = {}
-    paramUpdate['MessageID'] = req.body.MessageID;
+    paramUpdate['idMailjet'] = req.body.MessageID;
     paramUpdate['dateMailjetOpened'] = new date(req.body.time);
     paramUpdate['status'] = req.body.event;
     console.log(ParamUpdate + "before")
