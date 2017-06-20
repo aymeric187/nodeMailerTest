@@ -85,7 +85,7 @@ router.post('/email-event-catcher', function(req,res){
           recipients:[{Email: "aymeric@agence187.com"}],
           subject:"notification de lecture",
           html:"notification de lecture" + "param : " + JSON.stringify(paramUpdate)
-      }).then(  return res.sendStatus(200))
+      }).then( function(){ return res.sendStatus(200)})
     })
      .catch((error)=>{EmailHandler({
            _id: new Date(),
