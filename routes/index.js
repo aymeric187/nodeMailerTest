@@ -65,6 +65,7 @@ router.get('/email-up', function(req, res) {
 });
 
 router.post('/email-event-catcher', function(req,res){
+    console.log(req.body)
   for (var i =0; i< req.body.length; i++){
 
     var paramUpdate = {}
@@ -102,7 +103,7 @@ router.post('/email-event-catcher', function(req,res){
       replyTo:"aymeric@agence187.com",
       recipients:[{Email: "aymeric@agence187.com"}],
       subject:"notification de lecture",
-      html:"notification de lecture" + "param CLA FETE : " + JSON.stringify(req)
+      html:"notification de lecture" + "param CLA FETE : "
   })
 
 
