@@ -77,10 +77,10 @@ router.post('/email-event-catcher', function(req,res){
     _id = "44444444",
   from = "aymeric@agence187.com",
   name = "Aymeric",
-  replyTo = "aymeric@agence187.com";
-  recipients = [{Email: "aymeric@agence187.com"}];
-  subject = "notification de lecture";
-  html = "notification de lecture";
+  replyTo = "aymeric@agence187.com",
+  recipients = [{Email: "aymeric@agence187.com"}],
+  subject = "notification de lecture",
+  html = "notification de lecture",
   })
 
 
