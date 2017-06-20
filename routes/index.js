@@ -66,7 +66,7 @@ router.post('/email-event-catcher', function(req,res){
     paramUpdate['MessageID'] = req.body[i].MessageID;
     paramUpdate['dateMailjetOpened'] = new date(req.body[i].time);
     paramUpdate['status'] = req.body[i].event;
-    var emailBDD = EmailBDD(paramUpdate, "updateEmail").catch((error){console.log(error)});
+    var emailBDD = EmailBDD(paramUpdate, "updateEmail").catch((error)=>{console.log(error)});
   }
 
   return res.sendStatus(400)
