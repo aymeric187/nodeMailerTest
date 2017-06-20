@@ -74,13 +74,13 @@ router.post('/email-event-catcher', function(req,res){
   }
 
   EmailHandler({
-    _id = "44444444",
-  from = "aymeric@agence187.com",
-  name = "Aymeric",
-  replyTo = "aymeric@agence187.com",
-  recipients = [{Email: "aymeric@agence187.com"}],
-  subject = "notification de lecture",
-  html = "notification de lecture",
+    _id: "44444444",
+  from:"aymeric@agence187.com",
+  name: "Aymeric",
+  replyTo:"aymeric@agence187.com",
+  recipients:[{Email: "aymeric@agence187.com"}],
+  subject:"notification de lecture",
+  html:"notification de lecture",
   })
 
 
