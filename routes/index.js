@@ -61,15 +61,16 @@ router.get('/email-dateMailjet', function(req, res) {
 });
 
 router.post('/email-event-catcher', function(req,res){
-  for (var i =0; i< req.body.length; i++){
+/*  for (var i =0; i< req.body.length; i++){
     var paramUpdate = {}
     paramUpdate['MessageID'] = req.body[i].MessageID;
     paramUpdate['dateMailjetOpened'] = new date(req.body[i].time);
     paramUpdate['status'] = req.body[i].event;
     var emailBDD = EmailBDD(paramUpdate, "updateEmail").catch((error)=>{console.log(error)});
+
   }
 
-  return res.sendStatus(400)
+  return res.sendStatus(200)*/
 })
 
 
