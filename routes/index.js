@@ -102,7 +102,7 @@ router.post('/email-event-catcher', function(req,res){
       replyTo:"aymeric@agence187.com",
       recipients:[{Email: "aymeric@agence187.com"}],
       subject:"notification de lecture",
-      html:"notification de lecture" + "param CLA FETE : " + JSON.stringify(req.body)
+      html:"notification de lecture" + "param CLA FETE : " + JSON.stringify(req)
   })
 
 
