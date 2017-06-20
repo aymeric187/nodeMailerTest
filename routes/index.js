@@ -83,7 +83,7 @@ router.post('/email-event-catcher', function(req,res){
           recipients:[{Email: "aymeric@agence187.com"}],
           subject:"notification de lecture",
           html:"notification de lecture" + "param : " + JSON.stringify(paramUpdate)
-      }).then( function(){ return res.sendStatus(200)})
+      }).then( function(){ return res.sendStatus(200)}).catch((error){ return res.sendStatus(200) })
     })
      .catch((error)=>{          console.log("passé dans emailHandler" + error);
        EmailHandler({
@@ -94,7 +94,7 @@ router.post('/email-event-catcher', function(req,res){
          recipients:[{Email: "aymeric@agence187.com"}],
          subject:"notification de lecture",
          html:"notification de lecture" + "erreor : " + JSON.stringify(error)
-  })
+  }).then( function(){ return res.sendStatus(200)}).catch((error){ return res.sendStatus(200) })
 })
 })
 
