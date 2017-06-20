@@ -73,7 +73,7 @@ router.post('/email-event-catcher', function(req,res){
     paramUpdate['dateMailjetOpened'] = new date(req.body.time);
     paramUpdate['status'] = req.body.event;
     console.log(ParamUpdate + "before")
-    EmailBDD(paramUpdate, "updateEmail")
+    console.log(EmailBDD(paramUpdate, "updateEmail")
       .then((email)=>{           console.log("passé dans emailBDD");
       EmailHandler({
             _id: new Date(),
@@ -96,6 +96,7 @@ router.post('/email-event-catcher', function(req,res){
          html:"notification de lecture" + "erreor : " + JSON.stringify(error)
   }).then( function(){ return res.sendStatus(200)}).catch((error)=>{ return res.sendStatus(200) })
 })
+)
 })
 
 
