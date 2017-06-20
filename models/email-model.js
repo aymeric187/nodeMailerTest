@@ -5,7 +5,7 @@ var EmailVerif = require('../tools/email-verification');
 
 function Email(body) {
   EmailVerif(body).then((verify)=>{
-    if(verify.isCorrect){
+    if(true){
       this._id = body._id;
       if (typeof body.idMailjet === "undefined") {this.idMailjet = undefined} else {this.idMailjet = body.idMailjet};
       this.from = body.from

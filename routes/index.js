@@ -26,9 +26,9 @@ router.post('/send-email', function(req, res) {
 
 
           .then((tada)=>{
-            var emailAPI = EmailHandler(email)
+            EmailHandler(email)
 
-                  emailAPI.then((email)=>{
+                  .then((email)=>{
                     if(email.hasOwnProperty("idMailjet")){
                       EmailUpdater((email), ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
                     }
