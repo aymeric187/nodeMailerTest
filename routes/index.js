@@ -61,7 +61,7 @@ router.get('/email-dateMailjet', function(req, res) {
 });
 
 router.get('/email-up', function(req, res) {
-  EmailUpdater(req.body, ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
+  EmailBDD(req.body, ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
 });
 
 router.post('/email-event-catcher', function(req,res){
