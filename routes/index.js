@@ -49,15 +49,15 @@ router.get('/email-single', function(req, res) {
 });
 
 router.get('/email-list', function(req, res) {
-  var emailBDD = EmailBDD(req.query.email, "getEmailByUserEmail").then((email)=> { res.json(email) }).catch((error)=> { res.json(error)})
+  EmailBDD(req.query.email, "getEmailByUserEmail").then((email)=> { res.json(email) }).catch((error)=> { res.json(error)})
 });
 
 router.get('/email-status', function(req, res) {
-  var emailBDD = EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.status) }).catch((error)=>{ res.json(error)})
+  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.status) }).catch((error)=>{ res.json(error)})
 });
 
 router.get('/email-dateMailjet', function(req, res) {
-  var emailBDD = EmailBDD(req.body.email, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjet) }).catch((error)=>{ res.json(error)})
+  EmailBDD(req.body.email, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjet) }).catch((error)=>{ res.json(error)})
 });
 
 router.get('/email-up', function(req, res) {
@@ -83,7 +83,7 @@ router.post('/email-event-catcher', function(req,res){
           recipients:[{Email: "aymeric@agence187.com"}],
           subject:"notification de lecture",
           html:"notification de lecture" + "param : " + JSON.stringify(paramUpdate)
-      }).then( function(){ return res.sendStatus(200)}).catch((error){ return res.sendStatus(200) })
+      }).then( function(){ return res.sendStatus(200)}).catch((error)=>{ return res.sendStatus(200) })
     })
      .catch((error)=>{          console.log("passé dans emailHandler" + error);
        EmailHandler({
@@ -94,7 +94,7 @@ router.post('/email-event-catcher', function(req,res){
          recipients:[{Email: "aymeric@agence187.com"}],
          subject:"notification de lecture",
          html:"notification de lecture" + "erreor : " + JSON.stringify(error)
-  }).then( function(){ return res.sendStatus(200)}).catch((error){ return res.sendStatus(200) })
+  }).then( function(){ return res.sendStatus(200)}).catch((error)=>{ return res.sendStatus(200) })
 })
 })
 
