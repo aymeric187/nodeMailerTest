@@ -76,9 +76,9 @@ router.post('/email-event-catcher', function(req,res){
     paramUpdate['dateMailjetOpened'] = new date(req.body.time);
     console.log(new date(req.body.time));
     paramUpdate['status'] = req.body.event;
-    EmailBDD(paramUpdate, "updateEmail")
+    EmailBDD(paramUpdate, "updateEmail").catch((error)=> { console.log(error)})
       .then((email)=>{ EmailHandler({
-            _id: "44444444",
+            _id: new Date(),
           from:"aymeric@agence187.com",
           name: "Aymeric",
           replyTo:"aymeric@agence187.com",
@@ -88,7 +88,7 @@ router.post('/email-event-catcher', function(req,res){
       })
     })
      .catch((error)=>{EmailHandler({
-           _id: "44444444",
+           _id: new Date(),
          from:"aymeric@agence187.com",
          name: "Aymeric",
          replyTo:"aymeric@agence187.com",
@@ -99,15 +99,7 @@ router.post('/email-event-catcher', function(req,res){
 })
 
 
-  EmailHandler({
-        _id: "44444444",
-      from:"aymeric@agence187.com",
-      name: "Aymeric",
-      replyTo:"aymeric@agence187.com",
-      recipients:[{Email: "aymeric@agence187.com"}],
-      subject:"notification de lecture",
-      html:"notification de lecture" + "param CLA FETE : "
-  })
+
 
 
 
