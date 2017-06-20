@@ -73,7 +73,7 @@ router.post('/email-event-catcher', function(req,res){
     paramUpdate['dateMailjetOpened'] = req.body.time;
     paramUpdate['status'] = req.body.event;
 
-    var test = EmailBDD(paramUpdate, "updateEmail"))
+    var test = EmailBDD(paramUpdate, "updateEmail")
     console.log(test);
       test.then((email)=>{           console.log("passé dans emailBDD");
       EmailHandler({
