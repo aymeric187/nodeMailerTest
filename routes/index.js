@@ -60,6 +60,10 @@ router.get('/email-dateMailjet', function(req, res) {
   var emailBDD = EmailBDD(req.body.email, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjet) }).catch((error)=>{ res.json(error)})
 });
 
+router.get('/email-up', function(req, res) {
+  EmailUpdater(req.body, ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
+});
+
 router.post('/email-event-catcher', function(req,res){
   for (var i =0; i< req.body.length; i++){
     var paramUpdate = {}

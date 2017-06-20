@@ -15,7 +15,7 @@ function Email(body) {
     this.subject = body.subject;
     this.html = body.html;
     this.status = "unsent";
-    this.datePOST = body.post;
+    this.datePost = body.datePost;
     this.dateMailjetSent = undefined;
     this.dateMailjetOpened = undefined;
   }else{
