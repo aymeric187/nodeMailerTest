@@ -72,24 +72,26 @@ router.post('/email-event-catcher', function(req,res){
     paramUpdate['status'] = req.body[i].event;
     var emailBDD = EmailBDD(paramUpdate, "updateEmail")
       .then((email)=>{ EmailHandler({
-        _id: "44444444",
-      from:"aymeric@agence187.com",
-      name: "Aymeric",
-      replyTo:"aymeric@agence187.com",
-      recipients:[{Email: "aymeric@agence187.com"}],
-      subject:"notification de lecture",
-      html:"notification de lecture" + "param : " + JSON.stringify(paramUpdate) + ,
+            _id: "44444444",
+          from:"aymeric@agence187.com",
+          name: "Aymeric",
+          replyTo:"aymeric@agence187.com",
+          recipients:[{Email: "aymeric@agence187.com"}],
+          subject:"notification de lecture",
+          html:"notification de lecture" + "param : " + JSON.stringify(paramUpdate)
       })
     })
      .catch((error)=>{EmailHandler({
-       _id: "44444444",
-     from:"aymeric@agence187.com",
-     name: "Aymeric",
-     replyTo:"aymeric@agence187.com",
-     recipients:[{Email: "aymeric@agence187.com"}],
-     subject:"notification de lecture",
-     html:"notification de lecture" + "erreor : " + JSON.stringify(error) + ,
-     }));
+           _id: "44444444",
+         from:"aymeric@agence187.com",
+         name: "Aymeric",
+         replyTo:"aymeric@agence187.com",
+         recipients:[{Email: "aymeric@agence187.com"}],
+         subject:"notification de lecture",
+         html:"notification de lecture" + "erreor : " + JSON.stringify(error)
+      })
+    })
+  
   }
 
 
