@@ -11,7 +11,7 @@ function verifyEntry(body){
   else if(!body.recipients[0].Email) { verify.message = "recipients incorrect"; return verify }
   else if(typeof body.subject === "undefined" || !body.subject) { verify.message = "subject incorrect"; return verify }
   else if(typeof body.html === "undefined" || !body.html) { verify.message = "html incorrect"; return verify }
-  else if(typeof body.post === "undefined" || !body.post) { verify.message = "datePost incorrect"; return verify }
+  else if(typeof body.datePost === "undefined" || !body.datePost) { verify.message = "datePost incorrect"; return verify }
   else { verify.isCorrect = true ;return verify }
 }
 
