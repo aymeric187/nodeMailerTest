@@ -40,17 +40,21 @@ function EmailBDD(email, actionAsked){
 
 
       getEmailByIdPost: function () {
+          var req = {}
+          req['db'] = "email"
+          req['doc'] = email
+          req['method'] = "get"
 
-        db.find({selector:{_id:email}}, function(er, result) {
-          if (er) {
-            reject(er);
-          }else{
-            if("undefined" === typeof result.docs[0]){
-              reject("idPost uncorrect");
-            }
-            resolve(result.docs[0]);
-          }
-        });
+          cloudant.request(req, function(err, data) {
+              if (err){
+                reject(err)
+              }else{
+                  if("undefined" === typeof data){
+                    reject("idPost uncorrect");
+                  }
+                  resolve(data);
+              }
+          })
       },
 
       createEmail: function () {

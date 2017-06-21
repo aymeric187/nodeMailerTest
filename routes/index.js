@@ -45,7 +45,11 @@ router.post('/send-email', function(req, res) {
   //  res.json(EmailUpdater(EmailHandler(email), ["updateMessageStatus", "updateMessageDate"]));
 
 router.get('/email-single', function(req, res) {
-  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { email._rev = undefined; return res.json(email)}).catch((error)=>{ res.json(error)})
+  EmailBDD(req.query._id, "getEmailByIdPost")
+    .then((email)=> {
+      return res.json(email)
+    })
+    .catch((error)=>{ res.json(error)})
 });
 
 router.get('/email-list', function(req, res) {
@@ -60,50 +64,25 @@ router.get('/email-dateMailjet', function(req, res) {
   EmailBDD(req.body.email, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjet) }).catch((error)=>{ res.json(error)})
 });
 
-router.get('/email-up', function(req, res) {
-  EmailBDD(req.query, "getEmailByIdPost").then((email)=> { return res.json(email)})
-});
-
-router.get('/email-upgrade', function(req, res) {
-  console.log(req.query)
-  EmailUpdater(req.query, ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
-});
-
 
 router.post('/email-event-catcher', function(req,res){
-
-    console.log("entree");
+    console.log('-- EVENT CATCHER')
+    console.log("-- Requête IdMailjet : " + req.body.MessageID);
+    console.log("-- Requête date : " + new Date(req.body.time).toISOString();
+    console.log("-- Requête mail status : " + req.body.event;
+    console.log("------")
 
     var paramUpdate = {}
     paramUpdate['idMailjet'] = req.body.MessageID;
     paramUpdate['dateMailjetOpened'] = req.body.time;
     paramUpdate['status'] = req.body.event;
-/*
-    var test = EmailBDD(paramUpdate, "updateEmail")
-      test.then((email)=>{           console.log("passé dans emailBDD");
-      EmailHandler({
-            _id: new Date(),
-          from:"aymeric@agence187.com",
-          name: "Aymeric",
-          replyTo:"aymeric@agence187.com",
-          recipients:[{Email: "aymeric@agence187.com"}],
-          subject:"notification de lecture",
-          html:"notification de lecture" + "param : " + JSON.stringify(paramUpdate)
-      }).then( function(){ return res.sendStatus(200)}).catch((error)=>{ return res.sendStatus(200) })
-    })
-     .catch((error)=>{          console.log("passé dans emailHandler" + error);
-       EmailHandler({
-           _id: new Date(),
-         from:"aymeric@agence187.com",
-         name: "Aymeric",
-         replyTo:"aymeric@agence187.com",
-         recipients:[{Email: "aymeric@agence187.com"}],
-         subject:"notification de lecture",
-         html:"notification de lecture" + "erreor : " + JSON.stringify(error)
-  }).then( function(){ return res.sendStatus(200)}).catch((error)=>{ return res.sendStatus(200) })
-})
-*/
-return res.sendStatus(200)
+    EmailBDD(req.query._id, "getEmailByIdPost")
+      .then((email)=> {
+        EmailBDD(email, "updateEmail")
+          .then((email)=> { return res.sendStatus(200))
+          .catch((error)=> res.sendStatus(200));
+      })
+      .catch((error)=>{ res.sendStatus(200)})
 })
 
 
