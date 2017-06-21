@@ -48,6 +48,14 @@ router.get('/email-single', function(req, res) {
   EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email)}).catch((error)=>{ res.json(error)})
 });
 
+router.get('/setIndex', function(req, res) {
+  EmailBDD(" ", "setIndex").then((email)=> { res.json(email)}).catch((error)=>{ res.json(error)})
+});
+
+router.get('/email-idMailjet', function(req, res) {
+  EmailBDD(req.query.idMailjet, "getEmailByIdMailjet").then((email)=> { res.json(email)}).catch((error)=>{ res.json(error)})
+});
+
 router.get('/email-list', function(req, res) {
   EmailBDD(req.query.email, "getEmailByUserEmail").then((email)=> { res.json(email) }).catch((error)=> { res.json(error)})
 });
@@ -64,7 +72,7 @@ router.get('/email-dateMailjet', function(req, res) {
 router.post('/email-event-catcher', function(req,res){
     console.log('-- EVENT CATCHER')
     console.log("-- Requête IdMailjet : " + req.body.MessageID);
-    console.log("-- Requête date : " + new Date(req.body.time).toISOString());
+    console.log("-- Requête date : " + req.body.time);
     console.log("-- Requête mail status : " + req.body.event);
     console.log("------")
 
@@ -72,13 +80,17 @@ router.post('/email-event-catcher', function(req,res){
     paramUpdate['idMailjet'] = req.body.MessageID;
     paramUpdate['dateMailjetOpened'] = req.body.time;
     paramUpdate['status'] = req.body.event;
-    EmailBDD(req.query._id, "getEmailByIdPost")
+    if(paramUpdate.idMailjet && paramUpdate.dateMailjetOpened && paramUpdate.status){
+      console.log(1)
+    EmailBDD(paramUpdate.idMailjet, "getEmailByIdMailjet")
       .then((email)=> {
+        console.log(email)
         EmailBDD(email, "updateEmail")
-          .then((email)=> { return res.sendStatus(200)})
-          .catch((error)=> res.sendStatus(200));
+          .then((email)=> { console.log(email); res.sendStatus(200)})
+          .catch((error)=> { console.log(error); res.sendStatus(200)});
       })
-      .catch((error)=>{ res.sendStatus(200)})
+      .catch((error)=>{ console.log(error); return res.sendStatus(200)})
+    }else{ res.sendStatus(200)}
 })
 
 

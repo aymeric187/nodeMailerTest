@@ -25,6 +25,55 @@ function EmailBDD(email, actionAsked){
 
     var action = {
 
+      setIndex: function(){
+        var email_by_idMailjet = function(doc) {
+          if (doc.idMailjet) {
+            // This looks like a book.
+            index('idMailjet', doc.idMailjet);
+          }
+        }
+
+        var email_by_replyTo = function(doc) {
+          if (doc.replyTo) {
+            // This looks like a book.
+            index('replyTo', doc.replyTo);
+          }
+        }
+
+        var ddoc = {
+          _id: '_design/byIdMailjet',
+          indexes: {
+            email: {
+              analyzer: {name: 'standard'},
+              index   : email_by_idMailjet
+            }
+          }
+        };
+
+        var dddoc = {
+          _id: '_design/byReplyTo',
+          indexes: {
+            email: {
+              analyzer: {name: 'standard'},
+              index   : email_by_replyTo
+            }
+          }
+        };
+
+        db.insert(ddoc, function (er, result) {
+          if (er) {
+            throw er;
+          }
+        })
+
+          db.insert(dddoc, function (er, result) {
+            if (er) {
+              throw er;
+            }
+          });
+
+      },
+
       getEmailByUserEmail: function () {
           db.find({selector:{replyTo:email}}, function(er, result) {
             if (er) {
@@ -38,6 +87,26 @@ function EmailBDD(email, actionAsked){
           })
       },
 
+
+
+      getEmailByIdMailjet: function () {
+        // Note, you can make a normal JavaScript function. It is not necessary
+      // for you to convert it to a string as with other languages and tools.
+
+        db.search('byIdMailjet', 'email', {q:'idMailjet:'+email}, function(er, result) {
+          if (er) {
+            throw er;
+          }
+
+        console.log('Showing %d out of a total %d books by Dickens', result.rows.length, result.total_rows);
+          for (var i = 0; i < result.rows.length; i++) {
+            var valueString = JSON.stringify(result.rows[i]);
+            email = JSON.parse(valueString).id;
+            foo = action["getEmailByIdPost"];
+            foo();
+          }
+        });
+      },
 
       getEmailByIdPost: function () {
           var req = {}
