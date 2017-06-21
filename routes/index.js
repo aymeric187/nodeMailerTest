@@ -103,6 +103,7 @@ router.post('/email-event-catcher', function(req,res){
   }).then( function(){ return res.sendStatus(200)}).catch((error)=>{ return res.sendStatus(200) })
 })
 */
+return res.sendStatus(200)
 })
 
 
