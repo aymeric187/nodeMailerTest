@@ -8,8 +8,8 @@ function EmailUpdater(email, updateType){
       var foo = function () {}
 
   // The following code calls the Mailjet API in order to get Status
-      var apiKey = "e8ea3802545e22a1773e15f3abfa335b",
-        apiSecret = "0d0425e4b5faf6235399ca28c4bc3ce7";
+      var apiKey = "583ff8d18c721819dcf481c373550349",
+        apiSecret = "565a5c9bfdded48826d45fc17e02d74f";
 
       const mailjet = require ('node-mailjet')
         .connect(apiKey, apiSecret, {
@@ -26,13 +26,15 @@ function EmailUpdater(email, updateType){
             updateMessageStatus: function () {
               var returnValue = data.response.res.text;
               var stringValue = JSON.parse(returnValue);
-              email.status = stringValue.Data[0].Status;
+              if (!stringValue.Data[0]){ reject([{message: "wrong parameters for API mailjet"}, {email: email}])}
+              else{email.status = stringValue.Data[0].Status}
             },
 
             updateMessageDateSent: function () {
               var returnValue = data.response.res.text;
               var stringValue = JSON.parse(returnValue);
-              email.dateMailjetSent = stringValue.Data[0].ArrivedAt;
+              if (!stringValue.Data[0]){ reject([{message: "wrong parameters for API mailjet"}, {email: email}])}
+              else{email.dateMailjetSent = stringValue.Data[0].ArrivedAt}
             },
 
             update: function () {

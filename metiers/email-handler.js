@@ -2,8 +2,8 @@
 function EmailHandler(email){
 
   return new Promise((resolve, reject) => {
-      var apiKey = "e8ea3802545e22a1773e15f3abfa335b",
-        apiSecret = "0d0425e4b5faf6235399ca28c4bc3ce7";
+      var apiKey = "583ff8d18c721819dcf481c373550349",
+        apiSecret = "565a5c9bfdded48826d45fc17e02d74f";
 
         var Mailjet = require('node-mailjet').connect(apiKey, apiSecret, {
           proxyUrl: process.env.https_proxy,

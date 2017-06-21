@@ -20,15 +20,15 @@ router.post('/send-email', function(req, res) {
 
 
       .then((email) =>{
-        EmailBDD(email, "createEmail")
+        var emailBDD = EmailBDD(email, "createEmail")
 
 
 
 
-          .then((tada)=>{
-            EmailHandler(email)
+          emailBDD.then((tada)=>{
+            var emailHandler = EmailHandler(email)
 
-                  .then((email)=>{
+                  emailHandler.then((email)=>{
                     if(email.hasOwnProperty("idMailjet")){
                       EmailUpdater((email), ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
                     }
@@ -45,11 +45,7 @@ router.post('/send-email', function(req, res) {
   //  res.json(EmailUpdater(EmailHandler(email), ["updateMessageStatus", "updateMessageDate"]));
 
 router.get('/email-single', function(req, res) {
-  EmailBDD(req.query._id, "getEmailByIdPost")
-    .then((email)=> {
-      return res.json(email)
-    })
-    .catch((error)=>{ res.json(error)})
+  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email)}).catch((error)=>{ res.json(error)})
 });
 
 router.get('/email-list', function(req, res) {
