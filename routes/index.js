@@ -68,8 +68,8 @@ router.get('/email-dateMailjet', function(req, res) {
 router.post('/email-event-catcher', function(req,res){
     console.log('-- EVENT CATCHER')
     console.log("-- Requête IdMailjet : " + req.body.MessageID);
-    console.log("-- Requête date : " + new Date(req.body.time).toISOString();
-    console.log("-- Requête mail status : " + req.body.event;
+    console.log("-- Requête date : " + new Date(req.body.time).toISOString());
+    console.log("-- Requête mail status : " + req.body.event);
     console.log("------")
 
     var paramUpdate = {}
@@ -79,7 +79,7 @@ router.post('/email-event-catcher', function(req,res){
     EmailBDD(req.query._id, "getEmailByIdPost")
       .then((email)=> {
         EmailBDD(email, "updateEmail")
-          .then((email)=> { return res.sendStatus(200))
+          .then((email)=> { return res.sendStatus(200)})
           .catch((error)=> res.sendStatus(200));
       })
       .catch((error)=>{ res.sendStatus(200)})
