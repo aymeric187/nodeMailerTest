@@ -5,10 +5,12 @@ function EmailBDD(email, actionAsked){
 
   return new Promise((resolve, reject) => {
 
+
     var cloudant = Cloudant({account:"marrakchim", username:"hedoindedienctoessayston", password:"5fb2b1b257e52883589d87ebf42e4ecfd6928924"}, function(er, cloudant, reply) {
       if (er) {
         throw er;
       }else{
+
         console.log('Connected with username: %s', reply.userCtx.name);
         foo = action[actionAsked];
         foo();
@@ -19,6 +21,7 @@ function EmailBDD(email, actionAsked){
     var db = cloudant.db.use('email');
 
     var foo = function () {}
+
 
     var action = {
 

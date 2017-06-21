@@ -61,11 +61,12 @@ router.get('/email-dateMailjet', function(req, res) {
 });
 
 router.get('/email-up', function(req, res) {
-  EmailBDD(req.body, ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
+  EmailBDD(req.query, "getEmailByIdPost").then((email)=> { return res.json(email)})
 });
 
 router.get('/email-upgrade', function(req, res) {
-  EmailUpdater(req.body, ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
+  console.log(req.query)
+  EmailUpdater(req.query, ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
 });
 
 
@@ -77,7 +78,7 @@ router.post('/email-event-catcher', function(req,res){
     paramUpdate['idMailjet'] = req.body.MessageID;
     paramUpdate['dateMailjetOpened'] = req.body.time;
     paramUpdate['status'] = req.body.event;
-
+/*
     var test = EmailBDD(paramUpdate, "updateEmail")
       test.then((email)=>{           console.log("passé dans emailBDD");
       EmailHandler({
@@ -101,7 +102,7 @@ router.post('/email-event-catcher', function(req,res){
          html:"notification de lecture" + "erreor : " + JSON.stringify(error)
   }).then( function(){ return res.sendStatus(200)}).catch((error)=>{ return res.sendStatus(200) })
 })
-
+*/
 })
 
 
