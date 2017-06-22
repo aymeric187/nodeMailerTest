@@ -91,7 +91,7 @@ router.post('/email-event-catcher', function(req,res){
       .then((email)=> {
         email.dateMailjetOpened = req.body.time
         email.status = req.body.event
-        console.log(1)
+        console.log(email)
         EmailBDD(email, "updateEmail")
           .then((email)=> { console.log(2); console.log(email); res.sendStatus(200)})
           .catch((error)=> { console.log(2); console.log(error); res.sendStatus(200)});
