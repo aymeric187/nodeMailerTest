@@ -92,7 +92,7 @@ router.post('/email-event-catcher', function(req,res){
         }, 2000);
       });
     }
- function f1() {
+async function f1() {
       var x = await resolveAfter2Seconds(10);
       if(req.body.MessageID && req.body.time && req.body.event){
       EmailBDD(req.body.MessageID, "getEmailByIdMailjet")
