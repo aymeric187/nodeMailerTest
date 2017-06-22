@@ -62,7 +62,7 @@ router.get('/setIndex', function(req, res) {
 });
 
 router.get('/email-idMailjet', function(req, res) {
-  EmailBDD(req.query.idMailjet, "getEmailByIdMailjet").then((email)=> { res.json(email)}).catch((error)=>{ res.json(error)})
+  EmailBDD(req.query.idMailjet, "getEmailByIdMailjet").then((email)=> { console.log(email); res.json(email)}).catch((error)=>{ res.json(error)})
 });
 
 router.get('/email-list', function(req, res) {
@@ -85,15 +85,12 @@ router.post('/email-event-catcher', function(req,res){
     console.log("-- Requête mail status : " + req.body.event);
     console.log("------")
 
-    var paramUpdate = {}
-    paramUpdate['idMailjet'] = req.body.MessageID;
-    paramUpdate['dateMailjetOpened'] = req.body.time;
-    paramUpdate['status'] = req.body.event;
-    if(paramUpdate.idMailjet && paramUpdate.dateMailjetOpened && paramUpdate.status){
-      console.log(1)
-    EmailBDD(paramUpdate.idMailjet, "getEmailByIdMailjet")
+
+    if(req.body.MessageID && req.body.time && req.body.event){
+    EmailBDD(req.body.MessageID, "getEmailByIdMailjet")
       .then((email)=> {
-        console.log(email)
+        email.dateMailjetOpened = req.body.time
+        email.status = req.body.event
         EmailBDD(email, "updateEmail")
           .then((email)=> { console.log(email); res.sendStatus(200)})
           .catch((error)=> { console.log(error); res.sendStatus(200)});

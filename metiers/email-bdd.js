@@ -33,12 +33,7 @@ function EmailBDD(email, actionAsked){
           }
         }
 
-        var email_by_replyTo = function(doc) {
-          if (doc.replyTo) {
-            // This looks like a book.
-            index('replyTo', doc.replyTo);
-          }
-        }
+
 
         var ddoc = {
           _id: '_design/byIdMailjet',
@@ -50,21 +45,9 @@ function EmailBDD(email, actionAsked){
           }
         };
 
-        var dddoc = {
-          _id: '_design/byReplyTo',
-          indexes: {
-            email: {
-              analyzer: {name: 'standard'},
-              index   : email_by_replyTo
-            }
-          }
-        };
 
-        db.insert(ddoc, function (er, result) {
-          if (er) {
-            throw er;
-          }
-        })
+
+
 
           db.insert(dddoc, function (er, result) {
             if (er) {
@@ -88,20 +71,39 @@ function EmailBDD(email, actionAsked){
       },
 
 
+      getEmailByIdMailjet: function () {
+        // Note, you can make a normal JavaScript function. It is not necessary
+      // for you to convert it to a string as with other languages and tools.
 
+      db.find({selector:{idMailjet:email}}, function(er, result) {
+        if (er) {
+          console.log(er)
+          reject(er);
+        }else{
+          if(result.docs.length === 0){
+            reject("id uncorrect");
+          }
+          resolve(result.docs[0])
+        }
+      })
+    },
+/*
       getEmailByIdMailjet: function () {
         // Note, you can make a normal JavaScript function. It is not necessary
       // for you to convert it to a string as with other languages and tools.
 
         db.search('byIdMailjet', 'email', {q:'idMailjet:'+email}, function(er, result) {
           if (er) {
+            console.log(er);
             reject(er);
           }
-
+          console.log(email)
         if(result){
+          console.log(result);
           for (var i = 0; i < result.rows.length; i++) {
             var valueString = JSON.stringify(result.rows[i]);
             email = JSON.parse(valueString).id;
+            console.log(email)
             foo2 = action["getEmailByIdPost"];
             foo2();
           }
@@ -109,7 +111,7 @@ function EmailBDD(email, actionAsked){
         else{reject(result)}
         });
       },
-
+*/
       getEmailByIdPost: function () {
           var req = {}
           req['db'] = "email"
@@ -123,6 +125,7 @@ function EmailBDD(email, actionAsked){
                   if("undefined" === typeof data){
                     reject("idPost uncorrect");
                   }
+                  console.log("idPost")
                   resolve(data);
               }
           })
