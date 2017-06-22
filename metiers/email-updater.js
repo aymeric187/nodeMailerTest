@@ -21,18 +21,33 @@ function EmailUpdater(email, updateType){
 
       var message = mailjet.get('message')
 
+      function Example (fn, payload) {
+          this.fn = fn
+          this.payload = payload
+          this.format = function (obj) { return JSON.stringify(obj).match(/\S+/g).join('') }
+          this.call = function () {
+            var res = this.fn.request(this.payload)
+            var ret = res[0] + ' ' + this.format(res[1])
+            return ret
+      }
+    }
+
+      new Example(message.id(email.id))
+
       message.request(email.idMailjet).then((data)=>{
         var update = {
             updateMessageStatus: function () {
               var returnValue = data.response.res.text;
               var stringValue = JSON.parse(returnValue);
               if (!stringValue.Data[0]){ reject([{message: "wrong parameters for API mailjet"}, {email: email}])}
-              else{email.status = stringValue.Data[0].Status}
+              else{email.status = stringValue.Data[0].Status; console.log(email.status)}
             },
 
             updateMessageDateSent: function () {
               var returnValue = data.response.res.text;
               var stringValue = JSON.parse(returnValue);
+              console.log("ReturnValue date " + returnValue)
+
               if (!stringValue.Data[0]){ reject([{message: "wrong parameters for API mailjet"}, {email: email}])}
               else{email.dateMailjetSent = stringValue.Data[0].ArrivedAt}
             },

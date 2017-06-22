@@ -15,23 +15,32 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/send-email', function(req, res) {
-    new Promise((resolve, reject) => { var email = new Email(req.body); resolve(email)
+    new Promise((resolve, reject) => { console.log(1); var email = new Email(req.body); resolve(email)
     })
 
 
       .then((email) =>{
-        var emailBDD = EmailBDD(email, "createEmail")
+        console.log(2)
+        EmailBDD(email, "createEmail")
 
 
 
 
-          emailBDD.then((tada)=>{
-            var emailHandler = EmailHandler(email)
+          .then((email)=>{
+            console.log(3)
 
-                  emailHandler.then((email)=>{
+            EmailHandler(email)
+
+                  .then((email)=>{
+                    console.log(4)
+                    console.log(email)
+                    EmailBDD(email, "updateEmail").then((email)=> { console.log(email); return res.json(email)})
+                    /*
                     if(email.hasOwnProperty("idMailjet")){
-                      EmailUpdater((email), ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { return res.json(email)})
+                      console.log(5)
+                      EmailUpdater((email), ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { console.log(email); return res.json(email)})
                     }
+                    */
                   })
                   .catch((error)=> { return res.json(error) })
           })

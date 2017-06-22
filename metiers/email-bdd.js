@@ -20,7 +20,7 @@ function EmailBDD(email, actionAsked){
 
     var db = cloudant.db.use('email');
 
-    var foo = function () {}
+    var foo2 = function () {}
 
 
     var action = {
@@ -95,16 +95,18 @@ function EmailBDD(email, actionAsked){
 
         db.search('byIdMailjet', 'email', {q:'idMailjet:'+email}, function(er, result) {
           if (er) {
-            throw er;
+            reject(er);
           }
 
-        console.log('Showing %d out of a total %d books by Dickens', result.rows.length, result.total_rows);
+        if(result){
           for (var i = 0; i < result.rows.length; i++) {
             var valueString = JSON.stringify(result.rows[i]);
             email = JSON.parse(valueString).id;
-            foo = action["getEmailByIdPost"];
-            foo();
+            foo2 = action["getEmailByIdPost"];
+            foo2();
           }
+        }
+        else{reject(result)}
         });
       },
 
@@ -136,6 +138,7 @@ function EmailBDD(email, actionAsked){
                 cookies[username] = headers['set-cookie'];
               }
               email._rev = body.rev
+              console.log(email);
               resolve(email)
             }
           })

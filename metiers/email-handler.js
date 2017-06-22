@@ -1,3 +1,4 @@
+var JSONbig = require('json-bigint');
 
 function EmailHandler(email){
 
@@ -21,10 +22,12 @@ function EmailHandler(email){
 
         }
         function handleData (data) {
+
+
           var returnValue = data.response.res.text
-          var stringValue = JSON.parse(returnValue)
-          var sentValue = stringValue.Sent[0];
-          email.idMailjet = sentValue.MessageID;
+          var stringValue = JSONbig.parse(returnValue)
+          email.idMailjet = JSON.stringify(stringValue.Sent[0].MessageID).replace('"',"").replace('"',"");
+          console.log(email);
           resolve(email);
 
         }
