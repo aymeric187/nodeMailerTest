@@ -85,32 +85,27 @@ router.post('/email-event-catcher', function(req,res){
     console.log("-- Requête date : " + req.body.time);
     console.log("-- Requête mail status : " + req.body.event);
     console.log("------")
-    function resolveAfter2Seconds() {
-      return new Promise(resolve => {
+    new Promise(resolve => {
         setTimeout(() => {
           resolve();
         }, 10000);
-      });
-    }
-async function f1() {
-      var x = await resolveAfter2Seconds();
-      if(req.body.MessageID && req.body.time && req.body.event){
-      EmailBDD(req.body.MessageID, "getEmailByIdMailjet")
-        .then((email)=> {
-          email.dateMailjetOpened = req.body.time
-          email.status = req.body.event
-          console.log(email)
-          EmailBDD(email, "updateEmail")
-            .then((email)=> { console.log(2); console.log(email); res.sendStatus(200)})
-            .catch((error)=> { console.log(2); console.log(error); res.sendStatus(200)});
-        })
-        .catch((error)=>{ console.log(1);console.log(error); return res.sendStatus(200)})
-      }else{ res.sendStatus(200)}
+      }).then(function(){
+        if(req.body.MessageID && req.body.time && req.body.event){
+        EmailBDD(req.body.MessageID, "getEmailByIdMailjet")
+          .then((email)=> {
+            email.dateMailjetOpened = req.body.time
+            email.status = req.body.event
+            console.log(email)
+            EmailBDD(email, "updateEmail")
+              .then((email)=> { console.log(2); console.log(email); res.sendStatus(200)})
+              .catch((error)=> { console.log(2); console.log(error); res.sendStatus(200)});
+          })
+          .catch((error)=>{ console.log(1);console.log(error); return res.sendStatus(200)})
+        }else{ res.sendStatus(200)}
+      })
 
 
-}
 
-f1();
 
 
 })
