@@ -85,10 +85,9 @@ router.post('/email-event-catcher', function(req,res){
     console.log("-- Requête date : " + req.body.time);
     console.log("-- Requête mail status : " + req.body.event);
     console.log("------")
-    new Promise(resolve => {
-        setTimeout(() => {
+
           if(req.body.MessageID && req.body.time && req.body.event){
-          EmailBDD(req.body.MessageID, "getEmailByIdMailjet")
+          EmailBDD(req.body.MessageID, "getEmailByIdMailjet2")
             .then((email)=> {
               email.dateMailjetOpened = req.body.time
               email.status = req.body.event
@@ -99,9 +98,7 @@ router.post('/email-event-catcher', function(req,res){
             })
             .catch((error)=>{ console.log(1);console.log(error); return res.sendStatus(200)})
           }else{ res.sendStatus(200)}
-        }, 10000);
-      })
-    
+
 
 
 

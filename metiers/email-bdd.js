@@ -87,8 +87,8 @@ function EmailBDD(email, actionAsked){
         }
       })
     },
-/*
-      getEmailByIdMailjet: function () {
+
+      getEmailByIdMailjet2: function () {
         // Note, you can make a normal JavaScript function. It is not necessary
       // for you to convert it to a string as with other languages and tools.
 
@@ -111,7 +111,7 @@ function EmailBDD(email, actionAsked){
         else{reject(result)}
         });
       },
-*/
+
       getEmailByIdPost: function () {
           var req = {}
           req['db'] = "email"
