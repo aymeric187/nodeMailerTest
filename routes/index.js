@@ -91,11 +91,12 @@ router.post('/email-event-catcher', function(req,res){
       .then((email)=> {
         email.dateMailjetOpened = req.body.time
         email.status = req.body.event
+        console.log(1)
         EmailBDD(email, "updateEmail")
-          .then((email)=> { console.log(email); res.sendStatus(200)})
-          .catch((error)=> { console.log(error); res.sendStatus(200)});
+          .then((email)=> { console.log(2); console.log(email); res.sendStatus(200)})
+          .catch((error)=> { console.log(2); console.log(error); res.sendStatus(200)});
       })
-      .catch((error)=>{ console.log(error); return res.sendStatus(200)})
+      .catch((error)=>{ console.log(1);console.log(error); return res.sendStatus(200)})
     }else{ res.sendStatus(200)}
 })
 
