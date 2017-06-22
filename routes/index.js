@@ -34,7 +34,7 @@ router.post('/send-email', function(req, res) {
                   .then((email)=>{
                     console.log(4)
                     console.log(email)
-                    EmailBDD(email, "updateEmail").then((email)=> { console.log(email); return res.json(email)})
+                    EmailBDD(email, "updateEmail").then((email)=> {     console.log(new Date()); console.log(email); return res.json(email)})
                     /*
                     if(email.hasOwnProperty("idMailjet")){
                       console.log(5)
@@ -79,6 +79,7 @@ router.get('/email-dateMailjet', function(req, res) {
 
 
 router.post('/email-event-catcher', function(req,res){
+    console.log(new Date());
     console.log('-- EVENT CATCHER')
     console.log("-- Requête IdMailjet : " + req.body.MessageID);
     console.log("-- Requête date : " + req.body.time);
