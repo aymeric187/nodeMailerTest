@@ -87,9 +87,10 @@ router.post('/email-event-catcher', function(req,res){
     console.log("------")
           console.log(req.body.MessageID.toString())
           console.log(typeof req.body.MessageID)
+          var idMailjet = req.body.MessageID.toString()
 
-          if(req.body.MessageID && req.body.time && req.body.event){
-          EmailBDD(req.body.MessageID, "getEmailByIdMailjet")
+          if(idMailjet && req.body.time && req.body.event){
+          EmailBDD(ridMailjet, "getEmailByIdMailjet")
             .then((email)=> {
               email.dateMailjetOpened = req.body.time
               email.status = req.body.event
