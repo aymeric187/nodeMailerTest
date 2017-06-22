@@ -85,11 +85,15 @@ router.post('/email-event-catcher', function(req,res){
     console.log("-- Requête date : " + req.body.time);
     console.log("-- Requête mail status : " + req.body.event);
     console.log("------")
-
+    function resolveAfter2Seconds(x) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(x);
+        }, 2000);
+      });
+    }
 async function f1() {
-    var y = await 20;
-      console.log(y); // 20
-    y.then(function() {
+      var x = await resolveAfter2Seconds(10);
       if(req.body.MessageID && req.body.time && req.body.event){
       EmailBDD(req.body.MessageID, "getEmailByIdMailjet")
         .then((email)=> {
@@ -103,7 +107,7 @@ async function f1() {
         .catch((error)=>{ console.log(1);console.log(error); return res.sendStatus(200)})
       }else{ res.sendStatus(200)}
 
-    })
+
 
 }
 
