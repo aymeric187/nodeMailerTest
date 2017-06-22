@@ -26,10 +26,10 @@
   "devDependencies": {
     "mocha": "^3.4.2"
   },
-  {
+
   "engines": {
     "node": ">= 7.10.0"
     }
-  }
+  
 
 }
