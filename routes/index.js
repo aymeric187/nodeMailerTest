@@ -15,32 +15,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/send-email', function(req, res) {
-    new Promise((resolve, reject) => { console.log(1); var email = new Email(req.body); resolve(email)
-    })
-
-
-      .then((email) =>{
-        console.log(2)
-        EmailBDD(email, "createEmail")
-
-
-
+  EmailVerif(req.body).then(function(){
+      var email = new Email(req.body)
+      EmailBDD(email, "createEmail")
 
           .then((email)=>{
-            console.log(3)
-
             EmailHandler(email)
 
                   .then((email)=>{
-                    console.log(4)
-                    console.log(email)
-                    EmailBDD(email, "updateEmail").then((email)=> {     console.log(new Date()); console.log(email); return res.json(email)})
-                    /*
-                    if(email.hasOwnProperty("idMailjet")){
-                      console.log(5)
-                      EmailUpdater((email), ["updateMessageStatus", "updateMessageDateSent"]).then((email)=> { console.log(email); return res.json(email)})
-                    }
-                    */
+                    EmailBDD(email, "updateEmail").then((email)=> {   email._rev = undefined; return res.json(email)})
                   })
                   .catch((error)=> { return res.json(error) })
           })
@@ -54,37 +37,40 @@ router.post('/send-email', function(req, res) {
   //  res.json(EmailUpdater(EmailHandler(email), ["updateMessageStatus", "updateMessageDate"]));
 
 router.get('/email-single', function(req, res) {
-  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email)}).catch((error)=>{ res.json(error)})
+  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> {  email._rev = undefined; res.json(email)}).catch((error)=>{ res.json(error)})
 });
-
+/*
 router.get('/setIndex', function(req, res) {
   EmailBDD(" ", "setIndex").then((email)=> { res.json(email)}).catch((error)=>{ res.json(error)})
 });
 
 router.get('/email-idMailjet', function(req, res) {
-  EmailBDD(req.query.idMailjet, "getEmailByIdMailjet").then((email)=> { console.log(email); res.json(email)}).catch((error)=>{ res.json(error)})
+  EmailBDD(req.query.idMailjet, "getEmailByIdMailjet").then((email)=> { res.json(email)}).catch((error)=>{ res.json(error)})
 });
-
+//*/
 router.get('/email-list', function(req, res) {
-  EmailBDD(req.query.email, "getEmailByUserEmail").then((email)=> { res.json(email) }).catch((error)=> { res.json(error)})
+  EmailBDD(req.query.email, "getEmailByUserEmail").then((emailArray)=> { res.json(emailArray) }).catch((error)=> { res.json(error)})
 });
 
 router.get('/email-status', function(req, res) {
   EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.status) }).catch((error)=>{ res.json(error)})
 });
 
-router.get('/email-dateMailjet', function(req, res) {
-  EmailBDD(req.body.email, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjet) }).catch((error)=>{ res.json(error)})
+router.get('/email-dateMailjetSent', function(req, res) {
+  EmailBDD(req.body._id, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjetSent) }).catch((error)=>{ res.json(error)})
+});
+
+router.get('/email-dateMailjetOpened', function(req, res) {
+  EmailBDD(req.body._id, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjetOpened) }).catch((error)=>{ res.json(error)})
+});
+
+router.get('/email-datePost', function(req, res) {
+  EmailBDD(req.body._id, "getEmailByIdPost").then((email)=> { res.json(email.datePost) }).catch((error)=>{ res.json(error)})
 });
 
 
 router.post('/email-event-catcher', function(req,res){
-    console.log(new Date());
-    console.log('-- EVENT CATCHER')
-    console.log("-- Requête IdMailjet : " + req.body.MessageID);
-    console.log("-- Requête date : " + req.body.time);
-    console.log("-- Requête mail status : " + req.body.event);
-    console.log("------")
+
           idMailjet = req.body.MessageID.toString()
 
           if(idMailjet && req.body.time && req.body.event){
@@ -92,17 +78,12 @@ router.post('/email-event-catcher', function(req,res){
             .then((email)=> {
               email.dateMailjetOpened = req.body.time
               email.status = req.body.event
-              console.log(email)
               EmailBDD(email, "updateEmail")
-                .then((email)=> { console.log(2); console.log(email); res.sendStatus(200)})
-                .catch((error)=> { console.log(2); console.log(error); res.sendStatus(200)});
+                .then((email)=> {  res.sendStatus(200)})
+                .catch((error)=> { res.sendStatus(200)});
             })
-            .catch((error)=>{ console.log(1);console.log(error); return res.sendStatus(200)})
+            .catch((error)=>{  return res.sendStatus(200)})
           }else{ res.sendStatus(200)}
-
-
-
-
 
 })
 

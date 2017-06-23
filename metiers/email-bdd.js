@@ -65,6 +65,9 @@ function EmailBDD(email, actionAsked){
               if(result.docs.length === 0){
                 reject("id uncorrect");
               }
+              for (var i = 0; i<result.docs.length; i++){
+                result.docs[i]._rev = undefined
+              }
               resolve(result.docs)
             }
           })
@@ -77,7 +80,6 @@ function EmailBDD(email, actionAsked){
 
       db.find({selector:{idMailjet:email}}, function(er, result) {
         if (er) {
-          console.log(er)
           reject(er);
         }else{
           if(result.docs.length === 0){
@@ -87,7 +89,7 @@ function EmailBDD(email, actionAsked){
         }
       })
     },
-
+/*
       getEmailByIdMailjet2: function () {
         // Note, you can make a normal JavaScript function. It is not necessary
       // for you to convert it to a string as with other languages and tools.
@@ -97,13 +99,10 @@ function EmailBDD(email, actionAsked){
             console.log(er);
             reject(er);
           }
-          console.log(email)
         if(result){
-          console.log(result);
           for (var i = 0; i < result.rows.length; i++) {
             var valueString = JSON.stringify(result.rows[i]);
             email = JSON.parse(valueString).id;
-            console.log(email)
             foo2 = action["getEmailByIdPost"];
             foo2();
           }
@@ -111,7 +110,7 @@ function EmailBDD(email, actionAsked){
         else{reject(result)}
         });
       },
-
+*/
       getEmailByIdPost: function () {
           var req = {}
           req['db'] = "email"
@@ -125,7 +124,6 @@ function EmailBDD(email, actionAsked){
                   if("undefined" === typeof data){
                     reject("idPost uncorrect");
                   }
-                  console.log("idPost")
                   resolve(data);
               }
           })
@@ -141,7 +139,6 @@ function EmailBDD(email, actionAsked){
                 cookies[username] = headers['set-cookie'];
               }
               email._rev = body.rev
-              console.log(email);
               resolve(email)
             }
           })
@@ -156,7 +153,6 @@ function EmailBDD(email, actionAsked){
               if (headers && headers['set-cookie']) {
                 cookies[username] = headers['set-cookie'];
               }
-              console.log(body)
               resolve(email);
             }
             // Change the cookie if Cloudant tells us to.

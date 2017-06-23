@@ -9,6 +9,8 @@ function EmailVerif(body){
 
     var foo = function () {}
 
+    var fromArray = ["malek@agence187.com"]
+
     var action = {
       verifyEntry: function(){
         if(typeof body._id === "undefined" || !body._id) { verify.message = "_id incorrect"; return verify }
@@ -26,7 +28,6 @@ function EmailVerif(body){
       verifyNoSqlInjection: function(){
           verify.message = "possible noSql injection"
           for (var key in body) {
-            console.log(key)
         // skip loop if the property is from prototype
 
             var res = JSON.stringify(body[key]).match(/\$gt/gi);
@@ -44,25 +45,42 @@ function EmailVerif(body){
       },
 
       verifyAdress: function(){
-            if(body.recipients[this.index].Email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) != null)
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if(re.test(this.emailToVerify))
             {
               verify.isCorrect = true
-              verify.message = "recipients correct"
+              verify.message = this.key+ " correct"
             }else {
               verify.isCorrect = false;
-              verify.message = "recipients incorrect"
+              verify.message = this.key+ " incorrect"
             }
       },
 
 
       verifyAdresses:function(){
-            this.index = 0;
-            do{
-              foo = action["verifyAdress"];
-              foo();
-              this.index++;
-            }  while (this.index<body.recipients.length && verify.isCorrect === true)
-
+            for (this.key in body) {
+              if (this.key === "from"){
+                for (var i = 0; i < fromArray.length; i++){
+                  if(fromArray[i]!= body.from) {verify.isCorrect = false; verify.message = this.key + " incorrect"; return verify}
+                }
+              }
+              else if(this.key === "replyTo"){
+                this.emailToVerify = body[this.key];
+                foo = action["verifyAdress"];
+                foo();
+                if (verify.isCorrect === false){return verify}
+              }
+              else if(this.key === "recipients"){
+                  this.index = 0;
+                  do{
+                    this.emailToVerify = body.recipients[this.index].Email;
+                    foo = action["verifyAdress"];
+                    foo();
+                    if (verify.isCorrect === false){return verify}
+                    this.index++
+                  }  while (this.index<body.recipients.length)
+              }
+            }
       },
 
       verifyName:function(){
