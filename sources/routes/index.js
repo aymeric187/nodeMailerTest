@@ -59,11 +59,11 @@ router.get('/email-datePost', function(req, res) {
 router.post('/email-event-catcher', function(req,res){
 
           idMailjet = req.body.MessageID.toString()
-
           if(idMailjet && req.body.time && req.body.event){
           EmailBDD(idMailjet, "getEmailByIdMailjet")
             .then((email)=> {
-              var event = req.body.event.charAt(0).toUpperCase() + + string.slice(1);
+              console.log(3)
+              var event = req.body.event.charAt(0).toUpperCase() + req.body.event.slice(1);
               email['dateMailjet' + event] = new Date().toISOString();
               email.status = req.body.event
               EmailBDD(email, "updateEmail")
