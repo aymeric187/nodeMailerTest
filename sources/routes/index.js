@@ -44,15 +44,15 @@ router.get('/email-status', function(req, res) {
 });
 
 router.get('/email-dateMailjetSent', function(req, res) {
-  EmailBDD(req.body._id, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjetSent) }).catch((error)=>{ res.json(error)})
+  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjetSent) }).catch((error)=>{ res.json(error)})
 });
 
 router.get('/email-dateMailjetOpen', function(req, res) {
-  EmailBDD(req.body._id, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjetOpen) }).catch((error)=>{ res.json(error)})
+  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjetOpen) }).catch((error)=>{ res.json(error)})
 });
 
 router.get('/email-datePost', function(req, res) {
-  EmailBDD(req.body._id, "getEmailByIdPost").then((email)=> { res.json(email.datePost) }).catch((error)=>{ res.json(error)})
+  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.datePost) }).catch((error)=>{ res.json(error)})
 });
 
 
@@ -63,7 +63,8 @@ router.post('/email-event-catcher', function(req,res){
           if(idMailjet && req.body.time && req.body.event){
           EmailBDD(idMailjet, "getEmailByIdMailjet")
             .then((email)=> {
-              email['dateMailjet'+event] = new Date().toISOString();
+              var event = req.body.event.charAt(0).toUpperCase() + + string.slice(1);
+              email['dateMailjet' + event] = new Date().toISOString();
               email.status = req.body.event
               EmailBDD(email, "updateEmail")
                 .then((email)=> {  res.sendStatus(200)})
