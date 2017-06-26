@@ -47,7 +47,7 @@ router.get('/email-dateMailjetSent', function(req, res) {
   EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjetSent) }).catch((error)=>{ res.json(error)})
 });
 
-router.get('/email-dateMailjetOpen', function(req, res) {
+router.get('/email-dateMailjetOpened', function(req, res) {
   EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjetOpen) }).catch((error)=>{ res.json(error)})
 });
 
