@@ -43,16 +43,17 @@ router.get('/email-status', function(req, res) {
   EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.status) }).catch((error)=>{ res.json(error)})
 });
 
-router.get('/email-dateMailjetSent', function(req, res) {
-  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjetSent) }).catch((error)=>{ res.json(error)})
-});
+router.get('/email-dateMailjet', function(req, res) {
 
-router.get('/email-dateMailjetOpened', function(req, res) {
-  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.dateMailjetOpen) }).catch((error)=>{ res.json(error)})
-});
+  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> {
+    var date = {}
+    date['dateMailjetSent'] = email.dateMailjetSent
+    date['dateMailjetOpen'] = email.dateMailjetOpen
+    date['datePost'] = email.datePost
 
-router.get('/email-datePost', function(req, res) {
-  EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.datePost) }).catch((error)=>{ res.json(error)})
+    res.json(date)}
+
+  ).catch((error)=>{ res.json(error)})
 });
 
 
