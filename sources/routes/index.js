@@ -257,17 +257,15 @@ router.post('/email-event-catcher', function(req,res){
           if(idMailjet && req.body.time && req.body.event){
           EmailBDD(idMailjet, "getEmailByIdMailjet")
             .then((email)=> {
-              console.log(email)
               var event = req.body.event.charAt(0).toUpperCase() + req.body.event.slice(1);
               email['dateMailjet' + event] = new Date().toISOString();
               email.status = req.body.event
-              console.log(email)
               EmailBDD(email, "updateEmail")
-                .then((email)=> { console.log(email);res.sendStatus(200)})
-                .catch((error)=> { console.log(error);res.sendStatus(200)});
+                .then((email)=> { res.sendStatus(200)})
+                .catch((error)=> { res.sendStatus(200)});
             })
-            .catch((error)=>{  console.log(error);return res.sendStatus(200)})
-          }else{ console.log("errreur"); res.sendStatus(200)}
+            .catch((error)=>{  return res.sendStatus(200)})
+          }else{  res.sendStatus(200)}
 
 })
 

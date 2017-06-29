@@ -37,7 +37,6 @@ function EmailHandler(email){
           var returnValue = data.response.res.text
           var stringValue = JSON.parse(returnValue)
           email.idMailjet = JSON.stringify(stringValue.Sent[0].MessageID).replace('"',"").replace('"',"");
-          console.log(email);
           resolve(email);
 
         }
