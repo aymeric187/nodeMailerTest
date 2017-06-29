@@ -10,11 +10,11 @@ var index = require('./sources/routes/index');
 var cors = require('cors')
 
 
-  app = express();
+var app = express();
 
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'sources/views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
@@ -34,6 +34,33 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', index);
+
+app.use('/documentation', express.static(path.join(__dirname, './public/out')))
+
+// ...
+var swaggerUi = require('swagger-ui-express'); // line 7
+var swaggerJSDoc = require('swagger-jsdoc'); // line 8
+
+// ...
+var options = { // line 27
+  swaggerDefinition: {
+    info: {
+      title: 'swagger-express-jsdoc', // Title (required)
+      version: '1.0.0', // Version (required)
+    },
+  },
+  apis: ['./sources/routes/index.js'], // Path to the API docs
+};
+var swaggerSpec = swaggerJSDoc(options); // line 36
+
+// ...
+app.get('/user-guide.json', function(req, res) { // line 41
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
+// ...
+app.use('/user-guide', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // line 45
 
 
 // catch 404 and forward to error handler

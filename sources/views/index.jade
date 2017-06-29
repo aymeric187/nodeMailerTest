@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  ul#doc
+
+  li: a(href="documentation") API documentation
+  li: a(href="user-guide") API User Guide
+  li: a(href="user-guide.json") API User Guide in json format

@@ -2,6 +2,18 @@ var EmailVerif = require('../tools/email-verification');
 
 'use strict';
 
+/**
+ * Represents an email .
+ * @constructor
+ * @param {string} _id -  The _id of the client's email
+ * @param {string} from - The sender initialized in Mailjet API, will be displayed as sender in the email.
+ * @param {string} name - The name of the client's sender.
+ * @param {string} replyTo - The client sender 's email
+ * @param {string} recipients - The recipients, array of json, example: [{Email: \"nicolas@agence187.com\"}, {Email: \"gregory@agence187.com\"}]
+ * @param {string} subject - The subject of the email
+ * @param {string} html - The content of the email
+ * @param {string} datePost - date from which the Post has been made
+ */
 
 function Email(body) {
   EmailVerif(body).then((verify)=>{

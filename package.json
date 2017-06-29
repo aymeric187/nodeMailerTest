@@ -10,15 +10,16 @@
     "cloudant": "^1.8.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
-    "express": "~4.15.2",
+    "express": "^4.15.3",
     "jade": "~1.11.0",
     "jsdoc": "^3.4.3",
     "morgan": "~1.8.1",
     "node-mailjet": "^3.1.0",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "swagger-jsdoc": "^1.9.5",
+    "swagger-ui-express": "^2.0.0"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "engines": {
     "node": "^7.10.0"
   }

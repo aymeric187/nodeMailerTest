@@ -1,3 +1,8 @@
+/**
+ * The Email Handler will send the object email to Mailjet API that will, if well constructed, send the email and return us an idMailjet
+       @module EmailHandler
+     * @version 1.0
+ */
 function EmailHandler(email){
 
   return new Promise((resolve, reject) => {
@@ -19,6 +24,13 @@ function EmailHandler(email){
             'Recipients': email.recipients,"Headers": {"Reply-To":email.replyTo}
 
         }
+
+        /**
+          * get the response data from the promise requete, extract the idMailjet and attached it to the parameters email before resolving the whole promise EmailHandler
+          * @exports EmailHandler/handleData
+          * @namespace handleData
+        */
+
         function handleData (data) {
 
 

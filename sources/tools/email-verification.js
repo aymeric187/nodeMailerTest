@@ -1,4 +1,8 @@
-
+/**
+ * The Email Verif will verify all entry in order to form the email
+       @module EmailVerif
+     * @version 1.0
+ */
 function EmailVerif(body){
 
 
@@ -12,6 +16,12 @@ function EmailVerif(body){
     var fromArray = ["malek@agence187.com"]
 
     var action = {
+
+      /**
+        * Verify that the number of entry in json do not exceed, and that the entries are neither undefined nor empty
+        * @exports EmailVerif/verifyEntry
+        * @namespace verifyEntry
+      */
       verifyEntry: function(){
         if(typeof body._id === "undefined" || !body._id) { verify.message = "_id incorrect"; return verify }
         else if(typeof body.from === "undefined" || !body.from) {  verify.message = "from incorrect"; return verify }
@@ -25,6 +35,11 @@ function EmailVerif(body){
         else { verify.isCorrect = true}
       },
 
+      /**
+        * Verify that not Sql injection is in the entries
+        * @exports EmailVerif/verifyNoSqlInjection
+        * @namespace verifyNoSqlInjection
+      */
       verifyNoSqlInjection: function(){
           verify.message = "possible noSql injection"
           for (var key in body) {
@@ -44,6 +59,11 @@ function EmailVerif(body){
           verify.message = " ";
       },
 
+      /**
+        * Verify that a string is a correct email adress
+        * @exports EmailVerif/verifyAdress
+        * @namespace verifyAdress
+      */
       verifyAdress: function(){
             var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if(re.test(this.emailToVerify))
@@ -57,6 +77,11 @@ function EmailVerif(body){
       },
 
 
+      /**
+        * send to verifyAdress all the entries that have email adress
+        * @exports EmailVerif/verifyAdresses
+        * @namespace verifyAdresses
+      */
       verifyAdresses:function(){
             for (this.key in body) {
               if (this.key === "from"){
@@ -83,6 +108,11 @@ function EmailVerif(body){
             }
       },
 
+      /**
+        * verify that a name is composed of only letter and -
+        * @exports EmailVerif/verifyAdresses
+        * @namespace verifyAdresses
+      */
       verifyName:function(){
               if(body.name.match(/^[a-zA-Z -]+$/) != null)
               {
