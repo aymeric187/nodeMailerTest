@@ -4,6 +4,7 @@ var nodemailer = require('nodemailer');
 var Email = require('../models/email-model');
 var EmailBDD = require('../metiers/email-bdd');
 var EmailHandler = require('../metiers/email-handler');
+var CryptingHandler = require('../metiers/crypting-handler');
 var EmailVerif = require('../tools/email-verification');
 var bodyParser = require('body-parser');
 
@@ -65,6 +66,11 @@ router.get('/', function(req, res, next) {
   res.render("index");
 });
 
+
+router.get('/key', function(req, res, next) {
+  CryptingHandler();
+  res.sendStatus("200");
+});
 
 
 /**
@@ -251,15 +257,17 @@ router.post('/email-event-catcher', function(req,res){
           if(idMailjet && req.body.time && req.body.event){
           EmailBDD(idMailjet, "getEmailByIdMailjet")
             .then((email)=> {
+              console.log(email)
               var event = req.body.event.charAt(0).toUpperCase() + req.body.event.slice(1);
-              email.date['dateMailjet' + event] = new Date().toISOString();
+              email['dateMailjet' + event] = new Date().toISOString();
               email.status = req.body.event
+              console.log(email)
               EmailBDD(email, "updateEmail")
-                .then((email)=> { res.sendStatus(200)})
-                .catch((error)=> { res.sendStatus(200)});
+                .then((email)=> { console.log(email);res.sendStatus(200)})
+                .catch((error)=> { console.log(error);res.sendStatus(200)});
             })
-            .catch((error)=>{  return res.sendStatus(200)})
-          }else{ res.sendStatus(200)}
+            .catch((error)=>{  console.log(error);return res.sendStatus(200)})
+          }else{ console.log("errreur"); res.sendStatus(200)}
 
 })
 
