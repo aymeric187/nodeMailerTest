@@ -108,13 +108,9 @@ function EmailVerif(body){
             }
       },
 
-      /**
-        * verify that a name is composed of only letter and -
-        * @exports EmailVerif/verifyAdresses
-        * @namespace verifyAdresses
-      */
+  /*
       verifyName:function(){
-              if(body.name.match(/^[a-zA-Z -]+$/) != null)
+              if(body.name.match(/^[a-zA-Z -éèùâôûîï&]+$/) != null)
               {
                 verify.isCorrect = true
                 verify.message = " ";
@@ -123,6 +119,7 @@ function EmailVerif(body){
                 verify.message = "name incorrectly written"
               }
       }
+  */
     }
 
 
@@ -135,12 +132,9 @@ function EmailVerif(body){
           foo = action["verifyNoSqlInjection"];
           foo();
           if(verify.isCorrect){
-            foo = action["verifyName"];
-            foo();
-            if(verify.isCorrect){
+
                   verify.message = "everything correct"
                   resolve(verify);
-            }else reject(verify)
           }else reject(verify)
         }else reject(verify)
       }else reject(verify)
