@@ -5,6 +5,7 @@ var Email = require('../models/email-model');
 var EmailBDD = require('../metiers/email-bdd');
 var EmailHandler = require('../metiers/email-handler');
 var CryptingHandler = require('../metiers/crypting-handler');
+var PasswordSet = require('../metiers/password-set0');
 var EmailVerif = require('../tools/email-verification');
 var bodyParser = require('body-parser');
 
@@ -68,7 +69,8 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/key', function(req, res, next) {
-  CryptingHandler();
+  PasswordSet(req.query.password)
+  //CryptingHandler();
   res.sendStatus("200");
 });
 
