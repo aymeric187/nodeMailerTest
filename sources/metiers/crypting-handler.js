@@ -22,7 +22,7 @@ function CryptingHandler(signature){
     var privateNoCrypt = fs.readFileSync(path.join(__dirname, '/../private_unencrypted.pem'), 'utf8');
 
     var publicKey = PKI.publicKeyFromPem(publicKeyFromFile);
-    var privateKey = PKI.publicKeyFromPem(privateNoCrypt);
+    var privateKey = PKI.privateKeyFromPem(privateNoCrypt);
 
     //var signature = publicKey.encrypt(passhash);
     var decrypted = privateKey.decrypt(signature);
