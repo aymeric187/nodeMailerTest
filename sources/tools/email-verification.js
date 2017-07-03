@@ -23,7 +23,8 @@ function EmailVerif(body){
         * @namespace verifyEntry
       */
       verifyEntry: function(){
-        if(typeof body._id === "undefined" || !body._id) { verify.message = "_id incorrect"; return verify }
+        if( Object.keys(body).length >= 12) { verify.message = "too much json kills json"; return verify }
+        else if(typeof body._id === "undefined" || !body._id) { verify.message = "_id incorrect"; return verify }
         else if(typeof body.from === "undefined" || !body.from) {  verify.message = "from incorrect"; return verify }
         else if(typeof body.name === "undefined" || !body.name) { verify.message = "name incorrect"; return verify }
         else if(typeof body.replyTo === "undefined" || !body.replyTo) { verify.message = "replyTo incorrect"; return verify }
