@@ -1,12 +1,22 @@
 var express = require('express');
 var router = express.Router()
 var nodemailer = require('nodemailer');
+var bodyParser = require('body-parser');
+
+var UserBDD = require('../metiers/user-bdd');
+var CryptingHandler = require('../metiers/crypting-handler0');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var jwt = require('jsonwebtoken');
+var passportJWT = require("passport-jwt");
+var _ = require('lodash')
+
+
 var Email = require('../models/email-model');
 var EmailBDD = require('../metiers/email-bdd');
 var EmailHandler = require('../metiers/email-handler');
-var CryptingHandler = require('../metiers/crypting-handler');
 var EmailVerif = require('../tools/email-verification');
-var bodyParser = require('body-parser');
+
 
 /**
    * @swagger
@@ -67,9 +77,77 @@ router.get('/', function(req, res, next) {
 });
 
 
-router.get('/key', function(req, res, next) {
-  CryptingHandler(req.query.password)
-  res.sendStatus("200");
+router.post('/authentification', function(req, res, next) {
+  /*CryptingHandler(req.body.password).then((isCorrect)=>{
+    var auth= {}
+    auth['isCorrect'] = isCorrect
+    res.json(auth)
+  }).catch((error)=>{console.log(error); res.json(error)})
+*/
+
+});
+
+//===============PASSPORT=================
+var ExtractJwt = passportJWT.ExtractJwt;
+var JwtStrategy = passportJWT.Strategy;
+var jwtOptions = {}
+jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
+jwtOptions.secretOrKey = 'nonmaisfautvraimentpasoublier';
+
+var strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
+  console.log('payload received', jwt_payload);
+  // usually this would be a database call:
+  UserBDD(jwt_payload.username, 'getUserByUsername').then((user)=>{
+    next(null, true);
+  })
+  .catch((error)=>{console.log(error); next(null, false)})
+});
+
+passport.use(strategy);
+
+router.post('/login',
+            passport.authenticate('local',
+            { successRedirect: '/', failureRedirect: '/login' }
+));
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    console.log(1)
+      UserBDD(username, 'getUserByUsername').then((user)=>{
+        console.log(111)
+        console.log(CryptingHandler(password, "decryptSignature"))
+
+        if (!user) {
+          return done(null, false, { message: 'Incorrect username or password.' });
+        }
+        else if (user.password != true) {
+          console.log(1)
+          return done(null, false, { message: 'Incorrect username or password.' });
+        }
+        else{
+          var payload = {username: user.username};
+          var token = jwt.sign(payload, jwtOptions.secretOrKey);
+          return done(null, token);
+        }
+      })
+      .catch((error)=>  {console.log(error); done(null, false, { message: error })})
+  }
+));
+
+router.get('/login', function(req, res) {
+    return res.status(200).json(('login', { user : req.user }));
+});
+
+router.get("/secret", passport.authenticate('jwt', { session: false }), function(req, res){
+  res.json("Success! You can not see this without a token");
 });
 
 
@@ -131,10 +209,19 @@ router.post('/send-email', function(req, res) {
              .catch((error)=> { return res.json(error) })
          })
          .catch((error)=> { return res.json(error) })
-
-
    })
 
+   router.post('/createUser', function(req, res, next) {
+     if (CryptingHandler(req.body.apiPass, "verifyPassApi")){
+       console.log("tada")
+     }else{
+       console.log('non')
+     }
+/*
+       res.json(auth)
+     }).catch((error)=>{console.log(error); res.json(error)})
+*/
+   })
 
 /**
  * @swagger

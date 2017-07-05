@@ -10,25 +10,32 @@ var path = require('path');
         @module CryptingHandler
      * @version 1.0
  */
-function CryptingHandler(signature){
+function CryptingHandler(signature, actionAsked){
+  return new Promise((resolve, reject) => {
 
-    var rsa = forge.pki.rsa;
+  var foo = function () {}
 
-    var md = forge.md.sha1.create();
-    md.update('password', 'utf8');
-    var passhash = md.digest().toHex();
-    //var keypair = rsa.generateKeyPair({bits: 2048, e: 0x10001});
-    var publicKeyFromFile = fs.readFileSync(path.join(__dirname, '/../public.pem'), 'utf8');
-    var privateNoCrypt = fs.readFileSync(path.join(__dirname, '/../private_unencrypted.pem'), 'utf8');
+  var action = {
+    verifyPassApi : function(){
+      var md = forge.md.sha1.create();
+      md.update('surtoutnepasoublier', 'utf8');
+      var passhash = md.digest().toHex();
+      var isAccepted = (signature === passhash)
+      resolve(isAccepted)
+    },
 
-    var publicKey = PKI.publicKeyFromPem(publicKeyFromFile);
-    var privateKey = PKI.privateKeyFromPem(privateNoCrypt);
+    decryptSignature : function(){
+      //var privateNoCrypt = fs.readFileSync(path.join(__dirname, '/../private_unencrypted.pem'), 'utf8');
+      //var privateKey = PKI.privateKeyFromPem(privateNoCrypt);
+      resolve(signature)
+      //return privateKey.decrypt(signature);
 
-    //var signature = publicKey.encrypt(passhash);
-    var decrypted = privateKey.decrypt(signature);
+    }
+  }
 
-    return passhash === decrypted;
-
+  foo = action[actionAsked];
+  foo()
+  })
 
 }
 
