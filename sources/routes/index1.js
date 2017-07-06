@@ -94,7 +94,7 @@ var jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
 jwtOptions.secretOrKey = 'nonmaisfautvraimentpasoublier';
 
-var strategyJWT = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
+var strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
   console.log('payload received', jwt_payload);
   // usually this would be a database call:
   UserBDD(jwt_payload.username, 'getUserByUsername').then((user)=>{
@@ -103,13 +103,12 @@ var strategyJWT = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
   .catch((error)=>{console.log(error); next(null, false)})
 });
 
-passport.use(strategyJWT);
+passport.use(strategy);
 
-router.post('/login',function(req, res, next) {
-            passport.authenticate('login-local',function(err, response, info){
-              res.json(response)
-})(req, res, next)
-});
+router.post('/login',
+            passport.authenticate('local',
+            { successRedirect: '/', failureRedirect: '/login' }
+));
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -119,35 +118,33 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.use('login-local', new LocalStrategy({usernameField: 'email', passwordField: 'password'},
-  function(email, password, done) {
-      UserBDD(email, 'getUserByUsername').then((user)=>{
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    
+      UserBDD(username, 'getUserByUsername').then((user)=>{
+        console.log(1)
+        console.log(CryptingHandler(password, "decryptSignature"))
+
         if (!user) {
-          var response = {}
-          response['message'] = "no good, password or username incorrect"
-          response['isAccepted'] = false
-          return done(null, response);
+          return done(null, false, { message: 'Incorrect username or password.' });
         }
-        else if (user.password != CryptingHandler(password, "decryptSignature")) {
-          var response = {}
-          response['message'] = "no good, password or username incorrect"
-          response['isAccepted'] = false
-          return done(null, response);
+        else if (user.password != true) {
+          console.log(1)
+          return done(null, false, { message: 'Incorrect username or password.' });
         }
         else{
-          var payload = {username: user.email, company: user.company};
+          var payload = {username: user.username};
           var token = jwt.sign(payload, jwtOptions.secretOrKey);
-          var response = {}
-          response['token']= token
-          response['message'] = "its all good"
-          response['isAccepted'] = true
-          return done(null, response);
+          return done(null, token);
         }
       })
       .catch((error)=>  {console.log(error); done(null, false, { message: error })})
   }
 ));
 
+router.get('/login', function(req, res) {
+    return res.status(200).json(('login', { user : req.user }));
+});
 
 router.get("/secret", passport.authenticate('jwt', { session: false }), function(req, res){
   res.json("Success! You can not see this without a token");
@@ -214,40 +211,17 @@ router.post('/send-email', function(req, res) {
          .catch((error)=> { return res.json(error) })
    })
 
-passport.use('register-local', new LocalStrategy({usernameField: 'email', passwordField: 'password', passReqToCallback: true},
-     function(req, email, password, done) {
-           if (!CryptingHandler(req.body.apiPass, "verifyPassApi") ) {
-             var response = {}
-             response['message'] = "no good, password Api incorrect"
-             response['isAccepted'] = false
-             return done(null, response);
-           }
-           else{
-             password = CryptingHandler(password, "decryptSignature")
-             var user = {}
-             user['email'] = email
-             user['password'] = password
-             user['company'] = req.body.company
-             user['firstName'] = req.body.firstName
-             user['lastName'] = req.body.lastName
-              UserBDD(user, "createUser").then((user)=>{
-                var response = {}
-                response['message'] = "its all good"
-                response['isAccepted'] = true
-                response['user'] = user
-                return done(null, response);
-              })
-              .catch((error)=>  {console.log(error); done(null, false, { message: error })})
-           }
-}))
-
-
-router.post('/create-user', function(req, res, next) {
-            passport.authenticate('register-local',function(err, response, info){
-              res.json(response)
-})(req, res, next)
-});
-
+   router.post('/createUser', function(req, res, next) {
+     if (CryptingHandler(req.body.apiPass, "verifyPassApi")){
+       console.log("tada")
+     }else{
+       console.log('non')
+     }
+/*
+       res.json(auth)
+     }).catch((error)=>{console.log(error); res.json(error)})
+*/
+   })
 
 /**
  * @swagger

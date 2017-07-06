@@ -13,6 +13,7 @@ var path = require('path');
 function CryptingHandler(signature, actionAsked){
   return new Promise((resolve, reject) => {
 
+    console.log('foo')
   var foo = function () {}
 
   var action = {
@@ -25,6 +26,7 @@ function CryptingHandler(signature, actionAsked){
     },
 
     decryptSignature : function(){
+      console.log(signture)
       //var privateNoCrypt = fs.readFileSync(path.join(__dirname, '/../private_unencrypted.pem'), 'utf8');
       //var privateKey = PKI.privateKeyFromPem(privateNoCrypt);
       resolve(signature)
@@ -34,7 +36,7 @@ function CryptingHandler(signature, actionAsked){
   }
 
   foo = action[actionAsked];
-  foo()
+  foo();
   })
 
 }

@@ -12,7 +12,7 @@ function EmailBDD(email, actionAsked){
   return new Promise((resolve, reject) => {
 
     /** function in order to connect to cloudant, with as a callback function, the actionAsked, the performed action */
-    var cloudant = Cloudant({account:"marrakchim", username:"hedoindedienctoessayston", password:"5fb2b1b257e52883589d87ebf42e4ecfd6928924"}, function(er, cloudant, reply) {
+    var cloudant = Cloudant({account:"marrakchim", username:"evedinguidedidemightynco", password:"568b7be8dd906fbf805279d138387b73469099db"}, function(er, cloudant, reply) {
       if (er) {
         throw er;
       }else{
