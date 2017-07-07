@@ -34,9 +34,8 @@ var app = express();
     //app.use(cors())
     app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", '*'); //<-- you can change this with a specific url like http://localhost:4200
-        res.header("Access-Control-Allow-Credentials", true);
         res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-        res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         next();
     });
 
@@ -79,7 +78,7 @@ var app = express();
     app.use('/user-guide', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // line 45
 
 
-  
+
 
 //=============ERROR =====================
 

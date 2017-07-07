@@ -38,13 +38,15 @@ function UserBDD(param, actionAsked){
            * @namespace getEmailByUserEmail
       */
       getUserByUsername: function () {
-          db.find({selector:{email:param}}, function(er, result) {
+          db.find({selector:{username:param}}, function(er, result) {
             if (er) {
               reject(er);
             }else{
               if(result.docs.length === 0){
                 reject("username uncorrect");
               }
+              console.log(param)
+              console.log(result.docs[0])
               resolve(result.docs[0])
             }
           })
@@ -66,7 +68,7 @@ function UserBDD(param, actionAsked){
                     cookies[username] = headers['set-cookie'];
                   }
                   console.log(body)
-
+                  console.log(param)
                   param._rev = undefined
                   param.password = undefined
 

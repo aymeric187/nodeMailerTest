@@ -35,10 +35,11 @@ function CryptingHandler(signature, actionAsked){
       },
 
       decryptSignature : function(){
-        //var privateNoCrypt = fs.readFileSync(path.join(__dirname, '/../private_unencrypted.pem'), 'utf8');
-        //var privateKey = PKI.privateKeyFromPem(privateNoCrypt);
-        theReturn = signature
-        //return privateKey.decrypt(signature);
+        var privateNoCrypt = fs.readFileSync(path.join(__dirname, '/../private_unencrypted.pem'), 'utf8');
+        var privateKey = PKI.privateKeyFromPem(privateNoCrypt);
+        theReturn = privateKey.decrypt(signature);
+        console.log(theReturn)
+        return theReturn
 
       }
     }

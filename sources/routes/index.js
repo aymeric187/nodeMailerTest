@@ -119,22 +119,31 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.use('login-local', new LocalStrategy({usernameField: 'email', passwordField: 'password'},
-  function(email, password, done) {
-      UserBDD(email, 'getUserByUsername').then((user)=>{
+passport.use('login-local', new LocalStrategy({usernameField: 'username', passwordField: 'password'},
+  function(username, password, done) {
+    console.log(username)
+    console.log(password)
+    console.log(CryptingHandler(password, "decryptSignature"))
+      UserBDD(username, 'getUserByUsername').then((user)=>{
+
         if (!user) {
+          console.log(username)
           var response = {}
           response['message'] = "no good, password or username incorrect"
           response['isAccepted'] = false
           return done(null, response);
         }
         else if (user.password != CryptingHandler(password, "decryptSignature")) {
+          console.log(111)
+          console.log(user.password)
+          console.log(user)
           var response = {}
           response['message'] = "no good, password or username incorrect"
           response['isAccepted'] = false
           return done(null, response);
         }
         else{
+          console.log(1111)
           var payload = {username: user.email, company: user.company};
           var token = jwt.sign(payload, jwtOptions.secretOrKey);
           var response = {}
@@ -196,7 +205,10 @@ router.get("/secret", passport.authenticate('jwt', { session: false }), function
    *         description: 'Email'
    *         type: object
    */
-router.post('/send-email', function(req, res) {
+
+router.post('/send-email', function(req, res, next) {
+  req.headers.authorization = req.body.token;
+  passport.authenticate('jwt', { session: false }), function(req, res){
      EmailVerif(req.body).then(function(){
          var email = new Email(req.body)
          EmailBDD(email, "createEmail")
@@ -212,11 +224,15 @@ router.post('/send-email', function(req, res) {
              .catch((error)=> { return res.json(error) })
          })
          .catch((error)=> { return res.json(error) })
-   })
+   }(req, res, next)
+ })
 
-passport.use('register-local', new LocalStrategy({usernameField: 'email', passwordField: 'password', passReqToCallback: true},
-     function(req, email, password, done) {
-           if (!CryptingHandler(req.body.apiPass, "verifyPassApi") ) {
+
+passport.use('register-local', new LocalStrategy({usernameField: 'username', passwordField: 'password', passReqToCallback: true},
+     function(req, username, password, done) {
+           apiPass = CryptingHandler(req.body.apiPass, "decryptSignature")
+           console.log(apiPass)
+           if (!CryptingHandler(apiPass, "verifyPassApi") ) {
              var response = {}
              response['message'] = "no good, password Api incorrect"
              response['isAccepted'] = false
@@ -225,7 +241,8 @@ passport.use('register-local', new LocalStrategy({usernameField: 'email', passwo
            else{
              password = CryptingHandler(password, "decryptSignature")
              var user = {}
-             user['email'] = email
+             user['email'] = req.body.email
+             user['username'] = username
              user['password'] = password
              user['company'] = req.body.company
              user['firstName'] = req.body.firstName
