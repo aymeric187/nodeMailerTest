@@ -98,7 +98,7 @@ function EmailBDD(email, actionAsked){
           reject(er);
         }else{
           if(result.docs.length === 0){
-            reject("id uncorrect");
+            reject("id email uncorrect");
           }
           resolve(result.docs[0])
         }

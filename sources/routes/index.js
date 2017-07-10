@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router()
-var nodemailer = require('nodemailer');
 var bodyParser = require('body-parser');
 
 var UserBDD = require('../metiers/user-bdd');
@@ -16,6 +15,8 @@ var Email = require('../models/email-model');
 var EmailBDD = require('../metiers/email-bdd');
 var EmailHandler = require('../metiers/email-handler');
 var EmailVerif = require('../tools/email-verification');
+
+var URLSearchParams = URLSearchParams || require('urlsearchparams').URLSearchParams;
 
 
 /**
@@ -144,7 +145,7 @@ passport.use('login-local', new LocalStrategy({usernameField: 'username', passwo
         }
         else{
           console.log(1111)
-          var payload = {username: user.email, company: user.company};
+          var payload = {username: user.username, company: user.company};
           var token = jwt.sign(payload, jwtOptions.secretOrKey);
           var response = {}
           response['token']= token
@@ -160,6 +161,13 @@ passport.use('login-local', new LocalStrategy({usernameField: 'username', passwo
 
 router.get("/secret", passport.authenticate('jwt', { session: false }), function(req, res){
   res.json("Success! You can not see this without a token");
+});
+
+
+router.post("/secret",
+  passport.authenticate('jwt', { session: false }), function(req, res){
+  res.json("Success! You can not see this without a token");
+
 });
 
 
@@ -206,9 +214,7 @@ router.get("/secret", passport.authenticate('jwt', { session: false }), function
    *         type: object
    */
 
-router.post('/send-email', function(req, res, next) {
-  req.headers.authorization = req.body.token;
-  passport.authenticate('jwt', { session: false }), function(req, res){
+router.post('/send-email', passport.authenticate('jwt', { session: false }), function(req, res){
      EmailVerif(req.body).then(function(){
          var email = new Email(req.body)
          EmailBDD(email, "createEmail")
@@ -224,7 +230,6 @@ router.post('/send-email', function(req, res, next) {
              .catch((error)=> { return res.json(error) })
          })
          .catch((error)=> { return res.json(error) })
-   }(req, res, next)
  })
 
 
@@ -259,7 +264,7 @@ passport.use('register-local', new LocalStrategy({usernameField: 'username', pas
 }))
 
 
-router.post('/create-user', function(req, res, next) {
+router.post('/register-user', function(req, res, next) {
             passport.authenticate('register-local',function(err, response, info){
               res.json(response)
 })(req, res, next)
@@ -284,7 +289,7 @@ router.post('/create-user', function(req, res, next) {
  *         description: 'Email'
  *         type: object
  */
-router.get('/email-single', function(req, res) {
+router.get('/email-single',  passport.authenticate('jwt', { session: false }), function(req, res){
   EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> {  email._rev = undefined; res.json(email)}).catch((error)=>{ res.json(error)})
 });
 
@@ -306,7 +311,7 @@ router.get('/email-single', function(req, res) {
  *         description: "Array of Email"
  *         type: array
  */
-router.get('/email-list', function(req, res) {
+router.get('/email-list', passport.authenticate('jwt', { session: false }), function(req, res){
   EmailBDD(req.query.email, "getEmailByUserEmail").then((emailArray)=> { res.json(emailArray) }).catch((error)=> { res.json(error)})
 });
 
@@ -328,7 +333,7 @@ router.get('/email-list', function(req, res) {
  *         description: "status of the requested either unsent, sent, or open."
  *         type: string
  */
-router.get('/email-status', function(req, res) {
+router.get('/email-status', passport.authenticate('jwt', { session: false }), function(req, res){
   EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> { res.json(email.status) }).catch((error)=>{ res.json(error)})
 });
 
@@ -350,10 +355,8 @@ router.get('/email-status', function(req, res) {
  *         description: "object date inside Email (cf: Email Model)"
  *         type: object
  */
-router.get('/email-dateMailjet', function(req, res) {
-
+router.get('/email-dateMailjet', passport.authenticate('jwt', { session: false }), function(req, res){
   EmailBDD(req.query._id, "getEmailByIdPost").then((email)=> {
-
     var date = {}
     date['datePost']=email.datePost
     date['dateMailjetSent']=email.dateMailjetSent
