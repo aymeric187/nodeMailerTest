@@ -123,7 +123,7 @@ passport.deserializeUser(function(user, done) {
 passport.use('login-local', new LocalStrategy({usernameField: 'email', passwordField: 'password'},
   function(email, password, done) {
       UserBDD(email, 'getUserByUsername').then((user)=>{
-        if (!user) {
+        if (user.exist === false) {
           var response = {}
           response['message'] = "no good, password or username incorrect"
           response['isAccepted'] = false
@@ -224,10 +224,10 @@ router.post('/send-email', passport.authenticate('jwt', { session: false }), fun
  })
 
 
-passport.use('register-local', new LocalStrategy({usernameField: 'username', passwordField: 'password', passReqToCallback: true},
-     function(req, username, password, done) {
+passport.use('register-local', new LocalStrategy({usernameField: 'email', passwordField: 'password', passReqToCallback: true},
+     function(req, email, password, done) {
+       console.log( 'password' + password)
            apiPass = CryptingHandler(req.body.apiPass, "decryptSignature")
-           console.log(apiPass)
            if (!CryptingHandler(apiPass, "verifyPassApi") ) {
              var response = {}
              response['message'] = "no good, password Api incorrect"
@@ -236,15 +236,16 @@ passport.use('register-local', new LocalStrategy({usernameField: 'username', pas
            }
            else{
              password = CryptingHandler(password, "decryptSignature")
+             console.log(password)
              var user = {}
              user['email'] = email
              user['password'] = password
              user['company'] = req.body.company
              user['firstName'] = req.body.firstName
              user['lastName'] = req.body.lastName
-             UserBDD(email, 'getUserByUsername').then((user)=>{
-
-               if (!user) {
+             UserBDD(email, 'getUserByUsername').then((data)=>{
+               if (data.exist === false) {
+                 console.log(user)
                    UserBDD(user, "createUser").then((user)=>{
                      var response = {}
                      response['message'] = "its all good"
@@ -258,6 +259,8 @@ passport.use('register-local', new LocalStrategy({usernameField: 'username', pas
                    .catch((error)=>  {console.log(error); done(null, false, { message: error })})
                }
                else{
+                 console.log(data)
+                 var response = {}
                  response['message'] = "user already register, username already used"
                  response['isAccepted'] = false
                  return done(null, response);

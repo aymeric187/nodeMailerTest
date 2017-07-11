@@ -39,11 +39,12 @@ function UserBDD(param, actionAsked){
       */
       getUserByUsername: function () {
           db.find({selector:{email:param}}, function(er, result) {
+            console.log(result)
             if (er) {
               reject(er);
             }else{
               if(result.docs.length === 0){
-                reject("username uncorrect");
+                resolve({exist: false})
               }
               resolve(result.docs[0])
             }
