@@ -98,7 +98,7 @@ jwtOptions.secretOrKey = 'nonmaisfautvraimentpasoublier';
 var strategyJWT = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
   console.log('payload received', jwt_payload);
   // usually this would be a database call:
-  UserBDD(jwt_payload.username, 'getUserByUsername').then((user)=>{
+  UserBDD(jwt_payload.email, 'getUserByUsername').then((user)=>{
     next(null, true);
   })
   .catch((error)=>{console.log(error); next(null, false)})
@@ -120,32 +120,23 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.use('login-local', new LocalStrategy({usernameField: 'username', passwordField: 'password'},
-  function(username, password, done) {
-    console.log(username)
-    console.log(password)
-    console.log(CryptingHandler(password, "decryptSignature"))
-      UserBDD(username, 'getUserByUsername').then((user)=>{
-
+passport.use('login-local', new LocalStrategy({usernameField: 'email', passwordField: 'password'},
+  function(email, password, done) {
+      UserBDD(email, 'getUserByUsername').then((user)=>{
         if (!user) {
-          console.log(username)
           var response = {}
           response['message'] = "no good, password or username incorrect"
           response['isAccepted'] = false
           return done(null, response);
         }
         else if (user.password != CryptingHandler(password, "decryptSignature")) {
-          console.log(111)
-          console.log(user.password)
-          console.log(user)
           var response = {}
           response['message'] = "no good, password or username incorrect"
           response['isAccepted'] = false
           return done(null, response);
         }
         else{
-          console.log(1111)
-          var payload = {username: user.username, company: user.company};
+          var payload = {email: user.email, company: user.company};
           var token = jwt.sign(payload, jwtOptions.secretOrKey);
           var response = {}
           response['token']= token
@@ -246,13 +237,12 @@ passport.use('register-local', new LocalStrategy({usernameField: 'username', pas
            else{
              password = CryptingHandler(password, "decryptSignature")
              var user = {}
-             user['email'] = req.body.email
-             user['username'] = username
+             user['email'] = email
              user['password'] = password
              user['company'] = req.body.company
              user['firstName'] = req.body.firstName
              user['lastName'] = req.body.lastName
-             UserBDD(username, 'getUserByUsername').then((user)=>{
+             UserBDD(email, 'getUserByUsername').then((user)=>{
 
                if (!user) {
                    UserBDD(user, "createUser").then((user)=>{
@@ -268,7 +258,7 @@ passport.use('register-local', new LocalStrategy({usernameField: 'username', pas
                    .catch((error)=>  {console.log(error); done(null, false, { message: error })})
                }
                else{
-                 response['message'] = "user already sign in, username already used"
+                 response['message'] = "user already register, username already used"
                  response['isAccepted'] = false
                  return done(null, response);
                }
