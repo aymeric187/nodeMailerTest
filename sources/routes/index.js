@@ -252,14 +252,29 @@ passport.use('register-local', new LocalStrategy({usernameField: 'username', pas
              user['company'] = req.body.company
              user['firstName'] = req.body.firstName
              user['lastName'] = req.body.lastName
-              UserBDD(user, "createUser").then((user)=>{
-                var response = {}
-                response['message'] = "its all good"
-                response['isAccepted'] = true
-                response['user'] = user
-                return done(null, response);
-              })
-              .catch((error)=>  {console.log(error); done(null, false, { message: error })})
+             UserBDD(username, 'getUserByUsername').then((user)=>{
+
+               if (!user) {
+                   UserBDD(user, "createUser").then((user)=>{
+                     var response = {}
+                     response['message'] = "its all good"
+                     response['isAccepted'] = true
+                     response['user'] = user
+                     var payload = {username: user.username, company: user.company};
+                     var token = jwt.sign(payload, jwtOptions.secretOrKey);
+                     response['token'] = token
+                     return done(null, response);
+                   })
+                   .catch((error)=>  {console.log(error); done(null, false, { message: error })})
+               }
+               else{
+                 response['message'] = "user already sign in, username already used"
+                 response['isAccepted'] = false
+                 return done(null, response);
+               }
+             })
+             .catch((error)=>  {console.log(error); done(null, false, { message: error })})
+
            }
 }))
 
