@@ -32,7 +32,7 @@ var app = express();
     //app.use(cors())
     app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", '*'); //<-- you can change this with a specific url like http://localhost:4200
-        res.header('Access-Control-Allow-Methods', 'GET,POST');
+        res.header('Access-Control-Allow-Methods', 'GET, POST');
         res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
         res.header("Access-Control-Request-Headers", "Authorization");
         next();
